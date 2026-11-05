@@ -1,6 +1,30 @@
 # 仙台賞楓五日自由行｜旅の手帖
 
-手機優先的日式旅行手帳，供 2026/11/20–11/24 仙台、松島、岩沼自由行使用。React 19 + TypeScript + Vite + Tailwind CSS 4；無帳號、無後端、無付費地圖 API，未公開部署。
+手機優先的日式旅行手帳，供 2026/11/20–11/24 仙台、松島、岩沼自由行使用。React 19 + TypeScript + Vite + Tailwind CSS 4；無帳號、無後端、無付費地圖 API。網站發布使用 GitHub Pages；本機資料不會上傳至 GitHub。
+
+## 手機使用：GitHub Pages（一次性設定）
+
+發布目標是 `https://joyce097054-cloud.github.io/sendai-trip-planner/`。這是預定網址；只有 GitHub Pages 啟用並顯示部署成功後，才是可使用的網站。不要把預定網址當作已完成上線驗證。
+
+發布檔案由 `npm run deploy:pages` 建置並推送到獨立的 `gh-pages` 分支，不合併或改寫 `main`。第一次需由專案管理員開啟 [GitHub Pages 設定](https://github.com/joyce097054-cloud/sendai-trip-planner/settings/pages)：
+
+1. **Build and deployment → Source** 選 **Deploy from a branch**。
+2. **Branch** 選 **gh-pages**，資料夾選 **/(root)**，按 **Save**。
+3. 等 GitHub 顯示 **Your site is live at…**，再用手機 Safari 或 Chrome 開啟顯示的 HTTPS 網址。
+
+若看不到 Pages 設定或方案不支援，請不要為了部署而自行改變私有儲存庫的可見性，應改選有權限的託管服務。此網站預設沒有登入與密碼；預載的旅行計畫公開可讀。照片、私人筆記、清單修改只存在各裝置的瀏覽器，部署不包含這些使用者內容。
+
+- iPhone：Safari → 分享 → 加入主畫面。
+- Android：Chrome → 選單 → 加入主畫面（此為網站捷徑，非離線安裝保證）。
+- 不需在手機輸入任何指令。請避免使用聊天 App 的內建瀏覽器，以免資料和 Safari／Chrome 分隔。
+- 從免安裝版或其他網址搬移資料，先匯出 JSON，再到正式網站匯入。不同裝置仍不會自動同步，請定期備份。
+- 已儲存的頁面內容可留在頁面操作，但未實作 Service Worker；首次載入或重新開啟網站仍需網路。
+
+更新網站：先將程式變更提交 Git，再執行 `npm run deploy:pages`。腳本檢查乾淨工作目錄、保留既有發布歷史、不強制推送，也拒絕覆寫未標示為此 App 的 `gh-pages`。`dist/deployment.json` 記錄來源提交及建置時間，方便確認上線版本。`npm run deploy:pages -- --prepare-only` 只建置，不推送。
+
+可用 `npm run test:pages` 驗證正式產物在 `/sendai-trip-planner/` 子路徑的手機／桌面操作，避免開發首頁能開、部署卻找不到資源。真實站點仍需另外確認 HTTPS、首頁、插畫、路由與保存功能。
+
+本雲端的 GitHub API 與站點連線若被網路政策阻擋，無法代替管理員完成首次 Pages 啟用及實際上線驗證。已將 `api.github.com`、`joyce097054-cloud.github.io`、`api.open-meteo.com` 加入環境網路設定草稿；草稿需在環境設定中儲存並發布環境後才套用。這與 GitHub Pages 的網站發布是兩件事，使用者的手機一般網路不受此雲端政策控制。
 
 ## Windows 免安裝開啟（不必輸入指令）
 
@@ -8,7 +32,7 @@
 
 資料保存在瀏覽器中，並非直接寫回 HTML。請固定使用相同的瀏覽器與檔案位置；移動、更名、更新檔案或清除資料前先匯出完整 JSON 備份。電腦與手機不會自動同步。檔案來源的儲存行為因瀏覽器而異，已使用 Chromium 驗證單檔內容的保存、重新載入、照片與完整備份還原；雲端管理政策禁止 `file://`，因此尚未驗證 Windows 實機雙擊開檔。請定期備份。
 
-手機不需要下指令，但手機的檔案預覽不一定能執行這份 HTML。若要用手機日常使用，需要可從手機連線的網站位址；本專案目前沒有公開部署，也未提供可從使用者手機連線的雲端預覽網址。雲端伺服器的 `localhost` 無法在你的 Windows 或手機直接開啟。
+手機不需要下指令，但手機的檔案預覽不一定能執行這份 HTML。若要用手機日常使用，需要可從手機連線的網站位址；本專案已準備 GitHub Pages 發布方式，需完成下方的一次性啟用設定。雲端伺服器的 `localhost` 無法在你的 Windows 或手機直接開啟。
 
 開發者可執行 `npm run build:portable` 重建 `portable/`，或執行 `npm run test:portable` 驗證單檔內容（僅載入單一 HTML，沒有外部圖片或程式請求，含照片儲存及備份）。此雲端瀏覽器禁止 `file://`，測試透過模擬的本機 HTTP 文件驗證，不能取代 Windows 實機開檔確認。`portable/` 為開發輸出，不提交 Git；`downloads/sendai-travel-journal.zip` 是提供給使用者下載的版本快照。
 
@@ -22,7 +46,7 @@ npm ci
 npm run dev
 ```
 
-開發伺服器使用 5173 連接埠。只有在你自己的電腦執行上述指令後，才能在該電腦瀏覽 `http://localhost:5173`。雲端執行成功並不代表你的裝置可以連入該網址。這是開發預覽，不是公開網站；未設定任何部署平台。雲端沙箱如禁止監聽連接埠，需由執行工具授權啟動本機伺服器。
+開發伺服器使用 5173 連接埠。只有在你自己的電腦執行上述指令後，才能在該電腦瀏覽 `http://localhost:5173`。雲端執行成功並不代表你的裝置可以連入該網址。這是開發預覽；正式手機存取使用下方的 GitHub Pages 方式。雲端沙箱如禁止監聽連接埠，需由執行工具授權啟動本機伺服器。
 
 正式版本可執行 `npm run build`，再執行 `npm run preview`（預設連接埠 4173）。`dist/` 是建置輸出，未提交 Git。
 
@@ -92,4 +116,4 @@ public/sendai-autumn.svg   專案內建的原創秋日插畫（無外部圖片�
 tests/app.spec.ts         瀏覽器整合測試
 ```
 
-字體優先使用 Zen Maru Gothic；未安裝時使用 Noto Sans TC、蘋方、微軟正黑體等本機中文字型。沒有外部字體請求，離線已載入頁面仍可操作本機資料；本專案尚未加入 Service Worker，首次載入仍需可用的開發伺服器。
+字體優先使用 Zen Maru Gothic；未安裝時使用 Noto Sans TC、蘋方、微軟正黑體等本機中文字型。沒有外部字體請求，離線已載入頁面仍可操作本機資料；本專案尚未加入 Service Worker，網路版本首次載入仍需可用的網站；電腦免安裝版已內含所有程式資源。
