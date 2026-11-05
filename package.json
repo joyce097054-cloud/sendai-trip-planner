@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "scripts": { "dev": "vite --host 0.0.0.0", "build": "tsc -b && vite build", "typecheck": "tsc --noEmit", "test": "vitest run", "test:e2e": "playwright test", "preview": "vite preview --host 0.0.0.0" },
+  "scripts": { "dev": "vite --host 0.0.0.0", "build": "tsc -b && vite build", "build:portable": "npm run build && node scripts/build-portable.mjs", "typecheck": "tsc --noEmit", "test": "vitest run", "test:e2e": "playwright test", "test:portable": "npm run build:portable && playwright test --config playwright.portable.config.ts", "preview": "vite preview --host 0.0.0.0" },
   "dependencies": { "react": "^19.2.0", "react-dom": "^19.2.0", "lucide-react": "^0.468.0" },
   "devDependencies": { "@playwright/test": "^1.56.0", "@tailwindcss/vite": "^4.1.0", "@types/react": "^19.2.0", "@types/react-dom": "^19.2.0", "@vitejs/plugin-react": "^5.0.0", "tailwindcss": "^4.1.0", "typescript": "~5.9.3", "vite": "^7.2.0", "vitest": "^3.2.0" }
 }

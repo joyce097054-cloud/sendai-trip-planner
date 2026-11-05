@@ -2,7 +2,17 @@
 
 手機優先的日式旅行手帳，供 2026/11/20–11/24 仙台、松島、岩沼自由行使用。React 19 + TypeScript + Vite + Tailwind CSS 4；無帳號、無後端、無付費地圖 API，未公開部署。
 
-## 開始使用
+## Windows 免安裝開啟（不必輸入指令）
+
+使用 [Windows 免安裝版下載](https://github.com/joyce097054-cloud/sendai-trip-planner/raw/refs/heads/feat/sendai-travel-journal/downloads/sendai-travel-journal.zip)，解壓縮到固定資料夾，再對 `sendai-travel-journal.html` 按右鍵 → 開啟檔案 → Microsoft Edge 或 Google Chrome。網頁本體、程式、樣式與插畫都已打包進單一檔案，不需要安裝 Node.js，也不需要啟動伺服器。
+
+資料保存在瀏覽器中，並非直接寫回 HTML。請固定使用相同的瀏覽器與檔案位置；移動、更名、更新檔案或清除資料前先匯出完整 JSON 備份。電腦與手機不會自動同步。檔案來源的儲存行為因瀏覽器而異，已使用 Chromium 驗證單檔內容的保存、重新載入、照片與完整備份還原；雲端管理政策禁止 `file://`，因此尚未驗證 Windows 實機雙擊開檔。請定期備份。
+
+手機不需要下指令，但手機的檔案預覽不一定能執行這份 HTML。若要用手機日常使用，需要可從手機連線的網站位址；本專案目前沒有公開部署，也未提供可從使用者手機連線的雲端預覽網址。雲端伺服器的 `localhost` 無法在你的 Windows 或手機直接開啟。
+
+開發者可執行 `npm run build:portable` 重建 `portable/`，或執行 `npm run test:portable` 驗證單檔內容（僅載入單一 HTML，沒有外部圖片或程式請求，含照片儲存及備份）。此雲端瀏覽器禁止 `file://`，測試透過模擬的本機 HTTP 文件驗證，不能取代 Windows 實機開檔確認。`portable/` 為開發輸出，不提交 Git；`downloads/sendai-travel-journal.zip` 是提供給使用者下載的版本快照。
+
+## 開發者啟動方式
 
 需要 Node.js 22.12 以上（此環境使用 Node.js 24）及 npm。
 
@@ -12,7 +22,7 @@ npm ci
 npm run dev
 ```
 
-開發伺服器使用 5173 連接埠。請使用開發工具的本機預覽，或在自己的電腦瀏覽 `http://localhost:5173`。這是開發預覽，不是公開網站；未設定任何部署平台。雲端沙箱如禁止監聽連接埠，需由執行工具授權啟動本機伺服器。
+開發伺服器使用 5173 連接埠。只有在你自己的電腦執行上述指令後，才能在該電腦瀏覽 `http://localhost:5173`。雲端執行成功並不代表你的裝置可以連入該網址。這是開發預覽，不是公開網站；未設定任何部署平台。雲端沙箱如禁止監聽連接埠，需由執行工具授權啟動本機伺服器。
 
 正式版本可執行 `npm run build`，再執行 `npm run preview`（預設連接埠 4173）。`dist/` 是建置輸出，未提交 Git。
 
