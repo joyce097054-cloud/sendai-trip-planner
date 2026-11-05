@@ -1,16 +1,18 @@
 # 仙台賞楓五日自由行｜旅の手帖
 
-手機優先的日式旅行手帳，供 2026/11/20–11/24 仙台、松島、岩沼自由行使用。React 19 + TypeScript + Vite + Tailwind CSS 4；原行程／指南／天氣無須登入；擴充中的雙人分帳使用 Supabase Auth、PostgreSQL 與 Realtime，沒有付費地圖 API。網站發布使用 GitHub Pages；本機資料不會上傳至 GitHub。
+手機優先的日式旅行手帳，供 2026/11/20–11/24 仙台、松島、岩沼自由行使用。React 19 + TypeScript + Vite + Tailwind CSS 4；原行程／指南／天氣無須登入；擴充中的雙人分帳使用背景匿名驗證、PostgreSQL 與 Realtime，沒有付費地圖 API。網站發布使用 GitHub Pages；本機資料不會上傳至 GitHub。
 
-## 階段 1：雙人分帳（尚待實際 Supabase 連線驗收）
+## 階段 1：私人連結雙人分帳（不需要手動登入）
 
-新增「分帳」入口，支援兩人 Email 登入、顯示名稱、一次性限時邀請、雲端消費、共同匯率、結算與 CSV。尚未設定 Supabase 時會明確顯示未啟用，不填入假旅伴、消費或匯率。
+新版以同一個私人旅程連結共用帳本，背景使用 Supabase Anonymous Auth，不顯示 Email、密碼、驗證信或會員畫面。兩位帳務參與者是固定的名字及 UUID，與裝置身分分離；換手機、清除瀏覽器或使用超過兩部裝置，都可用同一私人連結重新進入。
 
-請依 [Supabase 逐步設定與驗收](docs/supabase-setup.md) 建立專案、設定公開環境變數、套用 SQL migration、設定 Email／回呼及 Realtime。前端沒有 service role key；建置會拒絕私人 key。原有 `sendai-journal-v1`／`sendai-photos` 及 JSON 備份保持相容，登入或登出分帳不會清除原有行程。
+請依 [Supabase 設定與安全升級說明](docs/supabase-setup.md) 開啟 Anonymous Sign-Ins，並執行完整新增 SQL `supabase/migrations/202611050002_private_books.sql`。全新專案只跑 002；已有 001 資料也只新增 002，不刪除或覆寫舊資料。不需要 SMTP、Email 範本或登入回呼設定。
 
-帳務以雲端為準，既有本機 JSON 備份不含雲端帳務；分帳可另匯出 UTF-8 BOM CSV。日圓使用整數、平均奇數由付款人負擔、共同匯率採 decimal；部分結算保留原始消費。離線禁止送出，版本衝突提示確認，同一操作重試沿用冪等 ID。
+共同帳務只保存在 Supabase 雲端。保留平均／單人／自訂分攤、整數日圓、decimal 匯率、台幣估算、部分結算、篩選及 UTF-8 BOM CSV。不同消費逐筆新增，編輯以版本檢查避免舊資料覆寫；同一操作重送有冪等保護。斷線重連及切回前景重新讀取資料，離線禁止送出。
 
-此分支的階段 1 尚未部署到現有網站，真實 Supabase 寄信／雙帳號／Realtime 及 iPhone Safari／PWA 仍待條件具備後驗收。介面契約測試使用明確測試資料，不代表雲端同步已完成。
+私人連結是讀寫帳本的鑰匙，不公開張貼；可以輪替並撤銷其他裝置權限。前端沒有 Secret key，資料庫仍以裝置授權及 RLS 驗證，不開放所有匿名訪客讀寫。舊會員表保留，必要時可由 SQL 管理者安全複製既有帳務，原資料不動。
+
+此分支尚未部署到原網站。正式 Supabase 的匿名驗證／Realtime 及兩支 iPhone 實機仍待設定後驗收，不用測試替身冒充已完成。既有行程、指南、照片與天氣保留，原本機 JSON 備份不含雲端帳務；分帳可另匯出 CSV。
 
 ## 手機使用：GitHub Pages（一次性設定）
 
@@ -74,7 +76,7 @@ npm run dev
 
 ## 資料保存與備份
 
-行程、清單與旅行資料使用 localStorage（`sendai-journal-v1`）；照片使用 IndexedDB（`sendai-photos`）。這些本機資料依瀏覽器與網站來源分隔，不會同步其他裝置。只有登入後的分帳使用 Supabase 雲端同步。更換網域、連接埠、瀏覽器或清除資料前請先匯出。
+行程、清單與旅行資料使用 localStorage（`sendai-journal-v1`）；照片使用 IndexedDB（`sendai-photos`）。這些本機資料依瀏覽器與網站來源分隔，不會同步其他裝置。只有通過私人連結授權的分帳使用 Supabase 雲端同步。更換網域、連接埠、瀏覽器或清除資料前請先匯出。
 
 右上角「資料備份」→「匯出完整 JSON 備份」包含文字資料與所有照片。匯入先驗證版本、欄位、編號、照片格式及關聯，再詢問是否取代；上限 100 MB。照片使用 base64 放入匯出的檔案，不放入 localStorage。大型照片集請定期另存原始照片；此 App 不取代專業相簿。
 

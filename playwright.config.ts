@@ -6,6 +6,7 @@ const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH ??
   (!existsSync(chromium.executablePath()) && existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined)
 
 export default defineConfig({
+  outputDir: 'test-results/e2e',
   testDir: './tests',
   timeout: 30_000,
   fullyParallel: false,

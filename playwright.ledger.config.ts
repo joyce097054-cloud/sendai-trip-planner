@@ -2,6 +2,7 @@ import { defineConfig, chromium } from '@playwright/test'
 import { existsSync } from 'node:fs'
 const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH ?? (!existsSync(chromium.executablePath())&&existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined)
 export default defineConfig({
+  outputDir: 'test-results/ledger',
   testDir:'./tests',testMatch:'ledger.pw.ts',workers:1,timeout:30000,reporter:'list',
   use:{baseURL:'http://127.0.0.1:5174',trace:'retain-on-failure',screenshot:'only-on-failure',launchOptions:{executablePath}},
   projects:[{name:'mobile-contract',use:{viewport:{width:390,height:844},isMobile:true,hasTouch:true}}],

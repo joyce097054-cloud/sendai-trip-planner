@@ -3,7 +3,7 @@ export type ExpenseCategory = typeof expenseCategories[number]
 export type SplitMode = 'equal' | 'single' | 'custom'
 export interface Member { id: string; name: string; slot: number }
 export interface Profile { id: string; name: string; version: number }
-export interface LedgerTrip { id: string; title: string; owner_id: string; rate: string | null; version: number }
+export interface LedgerTrip { id: string; title: string; owner_id: string | null; rate: string | null; version: number }
 export interface Expense {
   id: string; trip_id: string; title: string; amount_jpy: number; payer_id: string;
   date: string; split_mode: SplitMode; shares: Record<string, number>;
@@ -15,4 +15,4 @@ export interface LedgerSnapshot { schema_version: 1; profile: Profile | null; tr
 export interface Balance { member: Member; paid: number; owed: number; sent: number; received: number; net: number }
 export interface LedgerSummary { total: number; balances: Balance[]; transfer: { from: Member; to: Member; amount: number } | null }
 export interface ExpenseInput { id: string; title: string; amount_jpy: number; payer_id: string; date: string; split_mode: SplitMode; single_member_id?: string; shares?: Record<string, number>; category: ExpenseCategory; notes: string }
-export type Action = 'profile' | 'create_trip' | 'create_invite' | 'revoke_invite' | 'join_trip' | 'save_expense' | 'delete_expense' | 'set_rate' | 'save_settlement' | 'delete_settlement'
+export type Action = 'create_book' | 'open_book' | 'rename_participants' | 'rotate_link' | 'save_expense' | 'delete_expense' | 'set_rate' | 'save_settlement' | 'delete_settlement'

@@ -15,7 +15,7 @@ import { tripStatus } from './lib/dates'
 
 const initial: AppData = { version: 1, stops: defaultStops, packing: defaultPacking, details: defaultDetails }
 type Tab = 'itinerary' | 'guide' | 'weather' | 'expenses'
-function currentTab(): Tab { const hash = location.hash.slice(1); if (hash==='itinerary'||hash==='guide'||hash==='weather'||hash==='expenses') return hash; const q=new URLSearchParams(location.search); return q.has('code')||q.has('join')||q.has('error')||new URLSearchParams(hash).has('error_description')?'expenses':'itinerary' }
+function currentTab(): Tab { const hash = location.hash.slice(1).split('?')[0]; if (hash==='itinerary'||hash==='guide'||hash==='weather'||hash==='expenses') return hash; const q=new URLSearchParams(location.search); return q.has('join')?'expenses':'itinerary' }
 export default function App() {
   const [loaded] = useState(() => readData(initial))
   const [data, setData] = useState(loaded.data)

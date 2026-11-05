@@ -14,8 +14,9 @@
     "test:e2e": "playwright test",
     "test:portable": "npm run build:portable && playwright test --config playwright.portable.config.ts",
     "preview": "vite preview --host 0.0.0.0",
-    "test:db": "node scripts/test-ledger-db.mjs",
-    "test:ledger": "playwright test --config playwright.ledger.config.ts"
+    "test:db": "node scripts/test-shared-ledger-db.mjs",
+    "test:ledger": "playwright test --config playwright.ledger.config.ts",
+    "test:db:legacy": "node scripts/test-ledger-db.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
