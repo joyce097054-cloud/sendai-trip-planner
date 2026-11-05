@@ -179,7 +179,7 @@ test('三頁響應式不產生水平溢出，主導覽正常', async ({ page }, 
   // Let the intentional page entrance finish before collecting the design review image.
   await page.waitForTimeout(500)
   await page.screenshot({ path: `/tmp/sendai-${testInfo.project.name}.png`, fullPage: true, animations: 'disabled' })
-  for (const name of ['行程 Itinerary', '指南 Guide', '天氣 Weather']) {
+  for (const name of ['行程 Itinerary', '指南 Guide', '天氣 Weather', '分帳 Expenses']) {
     await nav(page, name).click()
     await expect(nav(page, name)).toHaveAttribute('aria-current', 'page')
     const overflow = await page.evaluate(() => ({ document: document.documentElement.scrollWidth, viewport: innerWidth }))
@@ -187,10 +187,25 @@ test('三頁響應式不產生水平溢出，主導覽正常', async ({ page }, 
   }
   if (testInfo.project.name === 'mobile') {
     await page.setViewportSize({ width: 320, height: 740 })
-    for (const name of ['行程 Itinerary', '指南 Guide', '天氣 Weather']) {
+    for (const name of ['行程 Itinerary', '指南 Guide', '天氣 Weather', '分帳 Expenses']) {
       await nav(page, name).click()
       await expect(nav(page, name)).toHaveAttribute('aria-current', 'page')
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320)
     }
   }
+})
+
+test('未設定雲端分帳時清楚顯示未啟用，既有本機行程資料保持不變', async ({ page }) => {
+  await page.goto('/')
+  const done=page.locator('article.stop-row').first().getByRole('button',{name:/^完成 /})
+  await done.click()
+  const saved=await page.evaluate(()=>localStorage.getItem('sendai-journal-v1'))
+  await nav(page,'分帳 Expenses').click()
+  await expect(page.getByRole('heading',{name:'雲端分帳尚未啟用',exact:true})).toBeVisible()
+  await expect(page.getByRole('button',{name:'新增消費',exact:true})).toHaveCount(0)
+  await expect(page.getByRole('button',{name:'寄送登入連結',exact:true})).toHaveCount(0)
+  expect(await page.evaluate(()=>localStorage.getItem('sendai-journal-v1'))).toBe(saved)
+  await nav(page,'行程 Itinerary').click()
+  await expect(page.locator('article.stop-row')).toHaveCount(5)
+  await expect(done).toHaveAttribute('aria-pressed','true')
 })
