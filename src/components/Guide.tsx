@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Backpack, Check, ChevronDown, ExternalLink, Minus, Pencil, Phone, Plane, Plus, RotateCcw, ShoppingBag, Trash2 } from 'lucide-react'
 import type { PackingItem, TravelDetails } from '../types'
 import { defaultPacking, packingGroups, guideInformation, practicalInformation } from '../data/guide'
+import CouponShelf from './guide/CouponShelf'
+import TaxRefundGuide from './guide/TaxRefundGuide'
 
 interface Props {
   packing: PackingItem[]
@@ -47,6 +49,8 @@ export default function Guide({ packing, setPacking, details, setDetails }: Prop
   return <div className="guide-page page-enter">
     <div className="section-heading"><div><p className="eyebrow">YOUR TRAVEL TOOLBOX</p><h2>旅行工具盒</h2><p className="muted">把準備收進手帳，帶著安心出發。</p></div><ShoppingBag size={28} strokeWidth={1.4} /></div>
 
+    <nav className="guide-quick-nav" aria-label="旅行指南章節">{[{id:'packing-title',label:'行李與購物'},{id:'practical-title',label:'交通與景點'},{id:'guide-coupons',label:'優惠券'},{id:'guide-tax-refund',label:'免稅教學'},{id:'travel-title',label:'旅行資料'},{id:'emergency-title',label:'緊急資訊'}].map(item=><button key={item.id} onClick={()=>document.getElementById(item.id)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}>{item.label}</button>)}</nav>
+
     <section className="panel packing-panel" aria-labelledby="packing-title">
       <div className="section-heading"><h3 id="packing-title"><Backpack size={19} /> 行李與購物清單</h3><button className="icon-button" aria-label="還原預設清單" onClick={() => setResetting(true)}><RotateCcw size={17} /></button></div>
       <div className="packing-tabs" role="group" aria-label="清單分類">{packingGroups.map(value => {
@@ -78,7 +82,8 @@ export default function Guide({ packing, setPacking, details, setDetails }: Prop
       </div>
     </section>
 
-    <section className="panel tax-panel" aria-labelledby="tax-title"><p className="eyebrow">NOVEMBER 2026 · TAX REFUND</p><h3 id="tax-title">日本免稅制度，出發前再確認</h3><p>本次旅遊日期在 <strong>2026/11/1 退稅制改制</strong>之後。改制日期依本次旅行需求提供；本開發環境未能連線讀取官方頁面，以下流程與適用條件皆<strong>待確認</strong>。</p><ol className="tax-steps"><li><span>01</span><div><strong>購物時先確認含稅付款方式</strong><p>向店家確認是否參與旅客退稅及需要保留的單據。</p></div></li><li><span>02</span><div><strong>出境前確認海關檢查程序</strong><p>保留商品與購物紀錄；託運前先確認是否需出示商品。</p></div></li><li><span>03</span><div><strong>依官方及店家程序領取退款</strong><p>退稅期限、手續費、付款工具與退款方式，請出發前查閱公告。</p></div></li></ol><p className="muted small">請勿沿用舊制的包裝、消耗品或金額規則。本工具不提供未經查證的門檻與期限。</p><div className="source-links"><External href="https://www.mlit.go.jp/kankocho/tax-free/index.html">日本觀光廳免稅資訊</External><External href="https://www.customs.go.jp/english/summary/passenger.htm">日本海關旅客資訊</External></div><p className="source-date">資料整理：2026/11/05｜官方內容查核：待確認（網路存取受限）</p></section>
+    <CouponShelf/>
+    <TaxRefundGuide/>
 
     <section aria-labelledby="reminders-title"><div className="section-heading"><h3 id="reminders-title">出發前的日本小筆記</h3></div><div className="guide-info-grid">{guideInformation.map(item => <details className="panel info-card" key={item.title}><summary>{item.title}<ChevronDown size={16} /></summary><p>{item.text}</p><External href={item.url}>{item.label}</External><p className="source-date">官方連結供出發前查核，規範更新待確認。</p></details>)}</div></section>
 

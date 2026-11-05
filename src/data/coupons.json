@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-06",
+  "categories": [
+    "Bic Camera",
+    "藥妝",
+    "百貨",
+    "電器／其他"
+  ],
+  "items": [
+    {
+      "id": "example-bic-camera",
+      "shopName": "Bic Camera",
+      "category": "Bic Camera",
+      "offerSummary": "範例欄位：優惠內容待提供，這不是真實優惠券",
+      "imagePath": null,
+      "instructions": [
+        "收到使用者提供的真實券圖後，才會在此顯示。"
+      ],
+      "conditions": [
+        "僅供示範資料結構，不可出示使用。"
+      ],
+      "validFrom": null,
+      "validUntil": null,
+      "sourceNotes": "範例資料；未提供優惠券圖片或有效條件。",
+      "isExample": true
+    }
+  ]
+}

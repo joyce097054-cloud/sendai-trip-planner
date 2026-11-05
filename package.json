@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/check-guide-assets.mjs && tsc -b && vite build",
     "build:portable": "npm run build && node scripts/build-portable.mjs",
     "deploy:pages": "node scripts/deploy-pages.mjs",
     "test:pages": "npm run build && playwright test --config playwright.pages.config.ts",
@@ -16,7 +16,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "test:db": "node scripts/test-shared-ledger-db.mjs",
     "test:ledger": "playwright test --config playwright.ledger.config.ts",
-    "test:db:legacy": "node scripts/test-ledger-db.mjs"
+    "test:db:legacy": "node scripts/test-ledger-db.mjs",
+    "check:guide": "node scripts/check-guide-assets.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",

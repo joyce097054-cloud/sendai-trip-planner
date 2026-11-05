@@ -1,0 +1,428 @@
+{
+  "version": 1,
+  "compiledAt": "2026-11-06",
+  "officialVerifiedAt": null,
+  "source": "使用者提供的文字與四張整理圖；未獨立核實最新官方規定。",
+  "verificationStatus": "待官方核對",
+  "reformDate": "2026-11-01",
+  "disclaimer": "實際規則可能依店鋪、平台、分店及當次退款方式而異，請以現場與退款明細為準。",
+  "sendaiNotice": "這趟旅程由仙台機場出境；提供的 VJW 七機場清單與兩種現金退稅機台清單都未列仙台。仙台適用的海關確認與領款方式仍待官方確認，請出發前向機場、店家與退款平台核對。",
+  "sources": [
+    {
+      "label": "日本海關旅客資訊",
+      "url": "https://www.customs.go.jp/english/summary/passenger.htm"
+    },
+    {
+      "label": "日本觀光廳免稅資訊",
+      "url": "https://www.mlit.go.jp/kankocho/tax-free/index.html"
+    },
+    {
+      "label": "Visit Japan Web 官方網站",
+      "url": "https://www.vjw.digital.go.jp/"
+    },
+    {
+      "label": "仙台國際機場官方網站",
+      "url": "https://www.sendai-airport.co.jp/"
+    }
+  ],
+  "sections": [
+    {
+      "id": "platforms",
+      "title": "日本退稅平台 APP 整理",
+      "summary": "退稅平台由店家指定。先準備證件資料，保留收據與退稅 QR Code，再核對各平台的退款方式及費用。",
+      "image": {
+        "path": "/tax-refund/01-platforms.jpg",
+        "alt": "使用者提供的日本退稅平台 APP 整理圖",
+        "available": false
+      },
+      "rawText": "需準備：護照、護照上的上陸許可貼紙、台灣住址英文翻譯。\n重點：退稅平台由店家指定，請保留收據與退稅 QR Code；以下為最常用的四大平台。\n1. J-TaxRefund（網站）：手續費固定 1.5%；每次登入需收信箱驗證碼；選信用卡退稅，需在台灣先綁好信用卡。\n2. JPrefund（網站）：登入需自拍掃臉；手續費依店鋪而定；選信用卡退稅，需在台灣先綁好信用卡。\n3. PIE VAT（App）：需下載 App；部分無法辦理現金退稅；手續費約 1.78%～3.32%。\n4. Global Blue（App）：手續費約 3%；只退「第一次綁定的那張卡」；選信用卡退稅，需在台灣先綁好信用卡。",
+      "shortTitle": "平台整理"
+    },
+    {
+      "id": "prepare",
+      "title": "出發前下載與加入主畫面",
+      "summary": "先確認店家指定平台。App 與網站的操作方式不同；網頁加入主畫面可減少旅途中尋找入口的時間。",
+      "image": {
+        "path": "/tax-refund/02-prepare-home-screen.jpg",
+        "alt": "使用者提供的免稅 App 與網頁加入主畫面步驟圖",
+        "available": false
+      },
+      "rawText": "APP：PIE VAT、Global Blue。網站：J-TaxRefund、JPrefund。\n「網頁版加入主畫面」請結合圖2做成步驟式說明。",
+      "shortTitle": "出發準備"
+    },
+    {
+      "id": "airport",
+      "title": "抵達機場：VJW 與手續機台",
+      "summary": "提供的整理將兩者列為海關確認方式；是否適用你的出境機場、是否須出示商品，仍應以海關指示為準。",
+      "image": {
+        "path": "/tax-refund/03-vjw-kiosk.jpg",
+        "alt": "使用者提供的 VJW 與機場免稅手續機台比較圖",
+        "available": false
+      },
+      "rawText": "前言：兩者都是辦理「海關確認商品」的方式，擇一使用即可。\n補充：VJW 退稅專用 Wi-Fi 名稱 Customs_WiFi_For_TaxRefund，密碼 jcustoms。",
+      "shortTitle": "機場確認"
+    },
+    {
+      "id": "cash",
+      "title": "機場現金退稅機台整理",
+      "summary": "先核對平台與出境機場是否支援現金領款，以及領款前的登記期限和額外費用。提供的清單未列出仙台機場。",
+      "image": {
+        "path": "/tax-refund/04-cash-refund.jpg",
+        "alt": "使用者提供的機場現金退稅機台整理圖",
+        "available": false
+      },
+      "rawText": "提醒：不是每間機場都支援現金退稅；未提供時須改用信用卡或其他線上方式；先確認店家、平台、出境機場是否支援；現金退稅一律以日圓支付；會收取原退稅業者指定退稅金額 10% 的手續費。\n1. Cash Japan（自助機、部分設人員櫃檯）｜機場：成田、關西、神戶、福岡、新千歲、中部｜平台：Global Blue、J-TaxRefund、JPrefund、IntaSect\n2. Self Tax Refund（自助現金退稅機）｜機場：羽田、成田、那霸｜平台：J-TaxRefund、JPrefund、Global Tax Free-Planet、AddSmart、LINKTIVITY、IntaSect",
+      "shortTitle": "現金退稅"
+    }
+  ],
+  "preparation": [
+    "護照",
+    "護照上的上陸許可貼紙",
+    "台灣住址英文翻譯"
+  ],
+  "platformReminder": "退稅平台由店家指定，請保留收據與退稅 QR Code；以下為最常用的四大平台。（使用者提供，待官方核對）",
+  "platforms": [
+    {
+      "name": "J-TaxRefund",
+      "format": "網站",
+      "fee": "手續費固定 1.5%",
+      "notes": [
+        "每次登入需收信箱驗證碼",
+        "選信用卡退稅，需在台灣先綁好信用卡"
+      ]
+    },
+    {
+      "name": "JPrefund",
+      "format": "網站",
+      "fee": "手續費依店鋪而定",
+      "notes": [
+        "登入需自拍掃臉",
+        "選信用卡退稅，需在台灣先綁好信用卡"
+      ]
+    },
+    {
+      "name": "PIE VAT",
+      "format": "App",
+      "fee": "手續費約 1.78%～3.32%",
+      "notes": [
+        "需下載 App",
+        "部分無法辦理現金退稅"
+      ]
+    },
+    {
+      "name": "Global Blue",
+      "format": "App",
+      "fee": "手續費約 3%",
+      "notes": [
+        "只退「第一次綁定的那張卡」",
+        "選信用卡退稅，需在台灣先綁好信用卡"
+      ]
+    }
+  ],
+  "refundMethods": [
+    {
+      "title": "信用卡、銀行轉帳、電子錢包",
+      "text": "可在日本先登記，也可回台灣後依平台規定期限補登退款資料。"
+    },
+    {
+      "title": "現金領取",
+      "text": "須在前往機場前提前完成登記，再至機場指定現金退稅地點、機台領取。"
+    }
+  ],
+  "refundReminder": "無論哪種方式，離開日本前都須在機場完成海關確認。",
+  "homeScreenSteps": [
+    "先確認店家指定的平台，下載 PIE VAT／Global Blue，或開啟 J-TaxRefund／JPrefund 網站。",
+    "使用手機瀏覽器開啟網站，找到分享或選單按鈕；位置依瀏覽器與版本而異。",
+    "選擇「加入主畫面」，確認名稱後新增。",
+    "出發前再測試登入，確認原有信用卡與個人資料是否登記完成。"
+  ],
+  "comparisonIntro": "兩者都是辦理「海關確認商品」的方式，擇一使用即可。（使用者提供，適用機場與流程待官方核對）",
+  "comparison": [
+    {
+      "topic": "用什麼操作",
+      "vjw": "自己的手機",
+      "kiosk": "機場設置的手續機台"
+    },
+    {
+      "topic": "怎麼辦理",
+      "vjw": "提前登錄 VJW，連接退稅專用 Wi-Fi，選「退稅手續」核對購買紀錄並送出",
+      "kiosk": "在機台讀取護照，依畫面指示辦理"
+    },
+    {
+      "topic": "哪裡可用",
+      "vjw": "成田、羽田、關西、中部、新千歲、福岡、那霸",
+      "kiosk": "依出境機場手續機台位置辦理"
+    },
+    {
+      "topic": "需查驗商品嗎",
+      "vjw": "若出現紅燈要求查驗，須攜帶商品前往海關檢查處",
+      "kiosk": "同左"
+    },
+    {
+      "topic": "完成後直接收到退稅嗎",
+      "vjw": "不代表立即入帳，依原退稅平台退款時間",
+      "kiosk": "同左"
+    }
+  ],
+  "wifi": {
+    "name": "Customs_WiFi_For_TaxRefund",
+    "password": "jcustoms",
+    "note": "使用者提供的公共 Wi-Fi 資訊，名稱、密碼與可用機場皆待官方核對。"
+  },
+  "cashReminder": "不是每間機場都支援現金退稅；未提供時須改用信用卡或其他線上方式；先確認店家、平台、出境機場是否支援；現金退稅一律以日圓支付；會收取原退稅業者指定退稅金額 10% 的手續費。",
+  "cashProviders": [
+    {
+      "name": "Cash Japan",
+      "type": "自助機、部分設人員櫃檯",
+      "airports": [
+        "成田",
+        "關西",
+        "神戶",
+        "福岡",
+        "新千歲",
+        "中部"
+      ],
+      "platforms": [
+        "Global Blue",
+        "J-TaxRefund",
+        "JPrefund",
+        "IntaSect"
+      ]
+    },
+    {
+      "name": "Self Tax Refund",
+      "type": "自助現金退稅機",
+      "airports": [
+        "羽田",
+        "成田",
+        "那霸"
+      ],
+      "platforms": [
+        "J-TaxRefund",
+        "JPrefund",
+        "Global Tax Free-Planet",
+        "AddSmart",
+        "LINKTIVITY",
+        "IntaSect"
+      ]
+    }
+  ],
+  "merchantGroups": [
+    {
+      "id": "first",
+      "title": "第一組",
+      "note": "申請費 0% 不代表領現、匯款或換匯都免手續費。"
+    },
+    {
+      "id": "second",
+      "title": "第二組",
+      "note": "mont-bell 提領費另按未稅價收 0.28%～0.32%。"
+    }
+  ],
+  "merchants": [
+    {
+      "name": "鶴羽",
+      "group": "first",
+      "fee": "0%",
+      "basis": "原始資料未註明計費基礎，待確認",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "Bic Camera",
+      "group": "first",
+      "fee": "申請費 0%",
+      "basis": "申請費",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "山田電機",
+      "group": "first",
+      "fee": "申請費 0%",
+      "basis": "申請費",
+      "platform": "Ocean 或 J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "唐吉訶德",
+      "group": "first",
+      "fee": "申請費 0%",
+      "basis": "申請費",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "多慶屋",
+      "group": "first",
+      "fee": "申請費 0%",
+      "basis": "申請費",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "東武",
+      "group": "first",
+      "fee": "未稅價 1%",
+      "basis": "未稅價",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "UNIQLO",
+      "group": "first",
+      "fee": "消費稅額約 10%",
+      "basis": "消費稅額",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "GU",
+      "group": "first",
+      "fee": "消費稅額約 10%",
+      "basis": "消費稅額",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "阿卡將",
+      "group": "first",
+      "fee": "含稅價 1.1%",
+      "basis": "含稅價",
+      "platform": "JPrefund",
+      "notes": ""
+    },
+    {
+      "name": "二木高爾夫",
+      "group": "first",
+      "fee": "未稅價 1.5%",
+      "basis": "未稅價",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "大丸、松坂屋",
+      "group": "second",
+      "fee": "最高未稅價 2.3%",
+      "basis": "未稅價",
+      "platform": "Global Blue",
+      "notes": ""
+    },
+    {
+      "name": "阪急、阪神",
+      "group": "second",
+      "fee": "未稅價約 2.3%",
+      "basis": "未稅價",
+      "platform": "Global Blue",
+      "notes": ""
+    },
+    {
+      "name": "松屋銀座",
+      "group": "second",
+      "fee": "含稅價 2.15%",
+      "basis": "含稅價",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    },
+    {
+      "name": "LUMINE、NEWoMan",
+      "group": "second",
+      "fee": "消費稅額 ＿＿（待我核對原始資料）",
+      "basis": "消費稅額，數字待確認",
+      "platform": "待確認",
+      "notes": "未填費率，不當作 0%。"
+    },
+    {
+      "name": "思夢樂",
+      "group": "second",
+      "fee": "未稅價 1%～2.5%",
+      "basis": "未稅價",
+      "platform": "JPrefund",
+      "notes": ""
+    },
+    {
+      "name": "三宅一生",
+      "group": "second",
+      "fee": "未稅價 3%",
+      "basis": "未稅價",
+      "platform": "Global Blue",
+      "notes": ""
+    },
+    {
+      "name": "MURASAKI SPORTS",
+      "group": "second",
+      "fee": "未稅價 2%～3%",
+      "basis": "未稅價",
+      "platform": "JPrefund",
+      "notes": ""
+    },
+    {
+      "name": "mont-bell",
+      "group": "second",
+      "fee": "未稅價 2%～3%",
+      "basis": "未稅價",
+      "platform": "PIE VAT",
+      "notes": "提領費另按未稅價收 0.28%～0.32%。"
+    },
+    {
+      "name": "3COINS",
+      "group": "second",
+      "fee": "每筆 ¥320",
+      "basis": "固定日圓／每筆",
+      "platform": "JPrefund",
+      "notes": ""
+    },
+    {
+      "name": "FANCL",
+      "group": "second",
+      "fee": "未稅價 3.5%",
+      "basis": "未稅價",
+      "platform": "JPrefund",
+      "notes": ""
+    },
+    {
+      "name": "駿河屋",
+      "group": "second",
+      "fee": "未稅價 4%",
+      "basis": "未稅價",
+      "platform": "J-TaxRefund",
+      "notes": ""
+    }
+  ],
+  "legacyPreparation": {
+    "title": "原有旅前提醒",
+    "intro": "本次旅遊日期在 2026/11/1 退稅制改制之後。改制日期依本次旅行需求提供；本開發環境未能連線讀取官方頁面，以下流程與適用條件皆待確認。",
+    "steps": [
+      {
+        "title": "購物時先確認含稅付款方式",
+        "text": "向店家確認是否參與旅客退稅及需要保留的單據。"
+      },
+      {
+        "title": "出境前確認海關檢查程序",
+        "text": "保留商品與購物紀錄；託運前先確認是否需出示商品。"
+      },
+      {
+        "title": "依官方及店家程序領取退款",
+        "text": "退稅期限、手續費、付款工具與退款方式，請出發前查閱公告。"
+      }
+    ],
+    "note": "請勿沿用舊制的包裝、消耗品或金額規則。本工具不提供未經查證的門檻與期限。"
+  },
+  "overview": "2026/11/1 改制與以下流程依你提供的整理建檔；平台費、店家費及機場確認各有不同用途，請分開核對。",
+  "downloadOptions": [
+    {
+      "format": "APP",
+      "names": [
+        "PIE VAT",
+        "Global Blue"
+      ]
+    },
+    {
+      "format": "網站",
+      "names": [
+        "J-TaxRefund",
+        "JPrefund"
+      ]
+    }
+  ]
+}

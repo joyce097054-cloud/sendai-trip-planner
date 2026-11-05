@@ -1,5 +1,5 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { extname, resolve } from 'node:path'
 
 // Produce a self-contained file: no server, CDN, font or asset requests.
 const root = resolve(import.meta.dirname, '..')
@@ -13,6 +13,22 @@ const image = `data:image/svg+xml;base64,${svg.toString('base64')}`
 let javascript = await readFile(asset(script[1]), 'utf8')
 const hero = JSON.stringify('sendai-autumn.svg')
 if (!javascript.includes(hero)) throw new Error('Hero asset was not found; portable build needs updating.')
+// Keep user-supplied guide images inside the standalone artifact too. Missing
+// teaching originals stay marked unavailable in JSON and are never substituted.
+const coupons = JSON.parse(await readFile(resolve(root, 'src/data/coupons.json'), 'utf8'))
+const tax = JSON.parse(await readFile(resolve(root, 'src/data/tax-refund.json'), 'utf8'))
+const guidePaths = new Set([
+  ...coupons.items.map(c => c.imagePath).filter(Boolean),
+  ...tax.sections.filter(s => s.image.available).map(s => s.image.path),
+])
+const guideImages = {}
+for (const path of guidePaths) {
+  const bytes = await readFile(resolve(root, 'public', '.' + path))
+  const mime = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp' }[extname(path).toLowerCase()]
+  if (!mime) throw new Error('Unsupported guide image format')
+  guideImages[path] = `data:${mime};base64,${bytes.toString('base64')}`
+}
+javascript = `globalThis.__SENDAI_GUIDE_IMAGES__=${JSON.stringify(guideImages)};\n${javascript}`
 javascript = javascript.replaceAll(hero, JSON.stringify(image)).replace(/<\/script/gi, '<\\/script')
 const css = (await readFile(asset(stylesheet[1]), 'utf8')).replace(/<\/style/gi, '<\\/style')
 html = html.replace(script[0], () => `<script type="module">${javascript}</script>`)
