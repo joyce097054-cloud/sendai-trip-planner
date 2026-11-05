@@ -38,3 +38,7 @@ PostgreSQL 測試只在 localhost 隔離資料庫執行，Auth UID 契約由測�
 5. 新版未發布至 gh-pages。正式兩機、關閉再開、實際 Realtime 與 iPhone Safari／主畫面模式仍待可用測試環境驗收。
 
 操作步驟、完整 SQL 位置與選擇性舊資料複製方式見 [Supabase 設定](supabase-setup.md)。保持停留在階段 1；不將待驗收項目寫成完成，也不進入階段 2 或自動部署。
+
+## 階段 1 測試版發布授權
+
+使用者已回覆「同意發布測試版」，允許將目前階段 1 發布至既有 GitHub Pages 供兩支 iPhone 驗收；仍不進入階段 2。Supabase 匿名驗證、11 列結構檢查及五張 Realtime 表已由使用者提供確認；Codex 的環境發布草稿仍鎖定，工具側無法直接讀取正式站點／Supabase。來源版本在新機器已恢復、TypeScript／建置／34 項單元測試通過，本次部署前亦重新通過 6 項正式子路徑手機／桌面檢查。推送發布產物不等於已獨立確認 GitHub Pages 完成或雙機同步成功；發布後需以手機驗收。
