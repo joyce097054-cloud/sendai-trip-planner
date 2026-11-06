@@ -51,7 +51,9 @@ test('退稅章節導航、機場比較與商家搜尋保留未確認資訊', as
   await expect(tax.getByText(/資料整理日期：2026\/11\/06/)).toBeVisible()
   await expect(tax.getByText(/提供的 VJW 七機場清單.*都未列仙台/)).toBeVisible()
   await expect(tax.locator('.platform-list article')).toHaveCount(4)
-  await expect(tax.getByText('教學圖 1 原圖待加入', { exact: true })).toBeVisible()
+  const original = tax.locator('#tax-platforms .tax-image-button img')
+  await original.scrollIntoViewIfNeeded()
+  await expect.poll(() => original.evaluate((el: HTMLImageElement) => el.naturalWidth)).toBe(1080)
   await tax.getByRole('navigation', { name: '免稅教學章節' }).getByRole('button', { name: /機場確認/ }).click()
   await expect(tax.locator('#tax-airport')).toHaveAttribute('open', '')
   await expect(tax.getByRole('table').getByRole('row')).toHaveCount(6)
@@ -105,6 +107,34 @@ test('券圖與教學圖可在 App 內放大、還原及關閉，已過期券有
   await expect(dialog).toHaveCount(0)
   await expect(page).toHaveURL(/#guide$/)
   expect(page.context().pages()).toHaveLength(1)
+})
+
+test('四張使用者教學原圖依章節顯示並可放大關閉', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/#guide')
+  const chapters = [
+    { id: 'platforms', label: '平台整理', file: '01-platforms.jpg' },
+    { id: 'prepare', label: '出發準備', file: '02-prepare-home-screen.jpg' },
+    { id: 'airport', label: '機場確認', file: '03-vjw-kiosk.jpg' },
+    { id: 'cash', label: '現金退稅', file: '04-cash-refund.jpg' },
+  ]
+  for (const chapter of chapters) {
+    await taxSection(page).getByRole('navigation', { name: '免稅教學章節' }).getByRole('button', { name: new RegExp(chapter.label) }).click()
+    const entry = page.locator(`#tax-${chapter.id} .tax-image-button`)
+    await entry.click()
+    const dialog = page.getByRole('dialog')
+    const img = dialog.locator('.media-scroll img')
+    await expect(img).toHaveAttribute('src', new RegExp(`/tax-refund/${chapter.file}$`))
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => ({ width: el.naturalWidth, height: el.naturalHeight }))).toEqual({ width: 1080, height: 1350 })
+    await dialog.getByRole('button', { name: '放大圖片', exact: true }).click()
+    await expect(dialog.locator('output')).toHaveText('150%')
+    await dialog.getByRole('button', { name: '關閉', exact: true }).click()
+    await expect(dialog).toHaveCount(0)
+    await expect(entry).toBeFocused()
+  }
+  await expect(page.locator('.tax-image-pending')).toHaveCount(0)
+  expect(page.context().pages()).toHaveLength(1)
+  await expect(page).toHaveURL(/#guide$/)
 })
 
 test('圖片載入失敗時仍可閱讀條件與文字教學', async ({ page }) => {

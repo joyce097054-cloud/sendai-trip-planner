@@ -51,6 +51,20 @@ test('單檔 HTML 無外部資源，行程、照片與完整備份可保存還�
   await expect(page.getByRole('heading', { name: '隨手帶著的優惠券', exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: '日本免稅與新退稅手冊', exact: true })).toBeVisible()
   await expect(page.locator('.merchant-row')).toHaveCount(21)
+  // Exercise actual user originals, embedded by the portable builder. No image
+  // requests may be made to a server, and no fixture replaces these four files.
+  for (const id of ['platforms', 'prepare', 'airport', 'cash']) {
+    const chapter = page.locator(`#tax-${id}`)
+    await chapter.evaluate((el: HTMLDetailsElement) => { el.open = true })
+    await chapter.locator('.tax-image-button').click()
+    const dialog = page.getByRole('dialog')
+    const img = dialog.locator('.media-scroll img')
+    await expect(img).toHaveAttribute('src', /^data:image\/jpeg;base64,/)
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => ({ width: el.naturalWidth, height: el.naturalHeight }))).toEqual({ width: 1080, height: 1350 })
+    await dialog.getByRole('button', { name: '放大圖片', exact: true }).click()
+    await expect(dialog.locator('output')).toHaveText('150%')
+    await dialog.getByRole('button', { name: '關閉', exact: true }).click()
+  }
   expect(requests.every(request => request === url)).toBe(true)
   expect(errors).toEqual([])
 })

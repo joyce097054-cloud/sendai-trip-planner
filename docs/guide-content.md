@@ -1,6 +1,6 @@
 # 指南內容、券圖與教學圖維護
 
-更新：2026/11/06（台灣時間）。階段 2 的程式與文字資料已建立；四張教學原圖仍待取得可讀取的檔案，真實優惠券圖尚未提供。本版不包含生成的優惠券或教學圖。
+更新：2026/11/06（台灣時間）。階段 2 的程式、文字與四張教學原圖已整合。原圖由使用者的 ZIP 提供，保留原始 JPG 位元組；真實優惠券圖尚未提供。本版不包含生成的優惠券或教學圖。
 
 ## 新增一張真實優惠券
 
@@ -32,7 +32,7 @@
 
 ## 四張教學原圖
 
-目前聊天中可見圖片預覽，但工作區沒有可讀取的原始檔案，以下是預定對應，並非已完成整合：
+四張原圖已由使用者提供的 ZIP 取得，以下對應已加入專案，`image.available` 均為 `true`：
 
 | 章節 | 檔案 | JSON `sections[].id` |
 | --- | --- | --- |
@@ -41,7 +41,7 @@
 | VJW 與機場手續機台比較 | `public/tax-refund/03-vjw-kiosk.jpg` | `airport` |
 | 機場現金退稅機台整理 | `public/tax-refund/04-cash-refund.jpg` | `cash` |
 
-請提供原始圖片檔或含四張圖的 ZIP。取得後將原圖放入此處，核對內容與次序，再將 `src/data/tax-refund.json` 對應的 `image.available` 改為 `true`。若原始檔為 PNG／WebP，保留原格式並修改 `image.path`；不要只更改副檔名。未取得原圖時維持 `false`，App 顯示缺圖提示，不請求不存在的圖片。
+後續替換圖片時，先保留舊圖與 Git 提交，再放入新原檔，核對內容與次序。`src/data/tax-refund.json` 的 `image.sourceFilename`、`image.sha256` 記錄這次的原始檔名與 SHA-256，`imagesReceivedAt` 為收件日期；替換後應一併更新。若新檔為 PNG／WebP，保留原格式並修改 `image.path`，不要只更改副檔名。若暫時移除圖片，將對應 `image.available` 改為 `false`，App 仍保留文字教學並顯示缺圖提示。
 
 可用圖片由章節內的按鈕開啟同一個 App 對話框，具放大、縮小、原尺寸與關閉功能。不要自行重畫原圖或放入生成替代圖。
 
@@ -49,7 +49,7 @@
 
 內容集中在 `src/data/tax-refund.json`，不需修改 UI 元件：
 
-- `compiledAt`：文字整理日期；`officialVerifiedAt`：實際查核官方的日期，尚未查核為 `null`。兩者不可混用。
+- `compiledAt`：文字整理日期；`imagesReceivedAt`：原圖收件日期；`officialVerifiedAt`：實際查核官方的日期，尚未查核為 `null`。收到原圖不代表費率已查證。
 - `source`、`verificationStatus`、`sources`：來源類型、待核對狀態與官方查核入口。列出官方連結不代表已讀取或確認內容。
 - `overview`、`sections`：教學摘要、章節順序、導覽文字、圖片與 `rawText` 原文。保留使用者原文；有新查核結果時另加註查核資料，不悄悄覆蓋原文。
 - `platforms`、`preparation`、`refundMethods`：四個平台、證件準備與兩種退款方式。

@@ -33,7 +33,9 @@
       "image": {
         "path": "/tax-refund/01-platforms.jpg",
         "alt": "使用者提供的日本退稅平台 APP 整理圖",
-        "available": false
+        "available": true,
+        "sourceFilename": "879350067_17911053510603436_6307427105974180986_n.jpg",
+        "sha256": "fe39b8193e1bfe106b4a464545a50c78895c44a0a9e163cd51a2e9d95c2547fe"
       },
       "rawText": "需準備：護照、護照上的上陸許可貼紙、台灣住址英文翻譯。\n重點：退稅平台由店家指定，請保留收據與退稅 QR Code；以下為最常用的四大平台。\n1. J-TaxRefund（網站）：手續費固定 1.5%；每次登入需收信箱驗證碼；選信用卡退稅，需在台灣先綁好信用卡。\n2. JPrefund（網站）：登入需自拍掃臉；手續費依店鋪而定；選信用卡退稅，需在台灣先綁好信用卡。\n3. PIE VAT（App）：需下載 App；部分無法辦理現金退稅；手續費約 1.78%～3.32%。\n4. Global Blue（App）：手續費約 3%；只退「第一次綁定的那張卡」；選信用卡退稅，需在台灣先綁好信用卡。",
       "shortTitle": "平台整理"
@@ -45,7 +47,9 @@
       "image": {
         "path": "/tax-refund/02-prepare-home-screen.jpg",
         "alt": "使用者提供的免稅 App 與網頁加入主畫面步驟圖",
-        "available": false
+        "available": true,
+        "sourceFilename": "886679686_17911053534603436_6032479263138130502_n.jpg",
+        "sha256": "cf3420f7acdc74e0f344930be83a0ccbc85802c1d9d602de358c1f015f2fff60"
       },
       "rawText": "APP：PIE VAT、Global Blue。網站：J-TaxRefund、JPrefund。\n「網頁版加入主畫面」請結合圖2做成步驟式說明。",
       "shortTitle": "出發準備"
@@ -57,7 +61,9 @@
       "image": {
         "path": "/tax-refund/03-vjw-kiosk.jpg",
         "alt": "使用者提供的 VJW 與機場免稅手續機台比較圖",
-        "available": false
+        "available": true,
+        "sourceFilename": "882727679_17911053573603436_3498931056150737746_n.jpg",
+        "sha256": "b7175be2286d3246054ad9041670acfe8f1d489af9d90fdf06bc7d247bf8f3fa"
       },
       "rawText": "前言：兩者都是辦理「海關確認商品」的方式，擇一使用即可。\n補充：VJW 退稅專用 Wi-Fi 名稱 Customs_WiFi_For_TaxRefund，密碼 jcustoms。",
       "shortTitle": "機場確認"
@@ -69,7 +75,9 @@
       "image": {
         "path": "/tax-refund/04-cash-refund.jpg",
         "alt": "使用者提供的機場現金退稅機台整理圖",
-        "available": false
+        "available": true,
+        "sourceFilename": "883002811_17911053597603436_2458411608110807999_n.jpg",
+        "sha256": "c261f7ea07e809b75116432b3517c66864aa3e8950496c5015b23be260fac97e"
       },
       "rawText": "提醒：不是每間機場都支援現金退稅；未提供時須改用信用卡或其他線上方式；先確認店家、平台、出境機場是否支援；現金退稅一律以日圓支付；會收取原退稅業者指定退稅金額 10% 的手續費。\n1. Cash Japan（自助機、部分設人員櫃檯）｜機場：成田、關西、神戶、福岡、新千歲、中部｜平台：Global Blue、J-TaxRefund、JPrefund、IntaSect\n2. Self Tax Refund（自助現金退稅機）｜機場：羽田、成田、那霸｜平台：J-TaxRefund、JPrefund、Global Tax Free-Planet、AddSmart、LINKTIVITY、IntaSect",
       "shortTitle": "現金退稅"
@@ -424,5 +432,6 @@
         "JPrefund"
       ]
     }
-  ]
+  ],
+  "imagesReceivedAt": "2026-11-06"
 }

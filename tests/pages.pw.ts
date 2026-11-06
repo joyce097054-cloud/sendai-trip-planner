@@ -48,6 +48,28 @@ test('正式子路徑載入全部資源，指南深連結與重新整理可使�
   assertHealthy()
 })
 
+test('正式子路徑四張教學原圖完整載入並可在 App 內放大', async ({ page }) => {
+  const assertHealthy = observeProduction(page)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('./#guide')
+  const chapters = ['platforms', 'prepare', 'airport', 'cash']
+  for (const id of chapters) {
+    const chapter = page.locator(`#tax-${id}`)
+    await chapter.evaluate((el: HTMLDetailsElement) => { el.open = true })
+    const entry = chapter.locator('.tax-image-button')
+    await entry.click()
+    const dialog = page.getByRole('dialog')
+    const img = dialog.locator('.media-scroll img')
+    expect(await img.evaluate((el: HTMLImageElement) => new URL(el.src).pathname)).toMatch(/^\/sendai-trip-planner\/tax-refund\//)
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => ({ width: el.naturalWidth, height: el.naturalHeight }))).toEqual({ width: 1080, height: 1350 })
+    await dialog.getByRole('button', { name: '放大圖片', exact: true }).click()
+    await expect(dialog.locator('output')).toHaveText('150%')
+    await page.keyboard.press('Escape')
+    await expect(dialog).toHaveCount(0)
+  }
+  assertHealthy()
+})
+
 test('正式子路徑可新增編輯行程、完成勾選並於重新整理後保存', async ({ page }) => {
   const assertHealthy = observeProduction(page)
   await page.goto('./')
