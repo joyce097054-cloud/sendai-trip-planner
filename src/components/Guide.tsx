@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { Backpack, Check, ChevronDown, ExternalLink, Minus, Pencil, Phone, Plane, Plus, RotateCcw, ShoppingBag, Trash2 } from 'lucide-react'
+import { Backpack, Check, ChevronDown, ExternalLink, Minus, Pencil, Phone, Plane, Plus, RotateCcw, Trash2 } from 'lucide-react'
 import type { PackingItem, TravelDetails } from '../types'
 import { defaultPacking, packingGroups, guideInformation, practicalInformation } from '../data/guide'
 import CouponShelf from './guide/CouponShelf'
 import TaxRefundGuide from './guide/TaxRefundGuide'
+import SectionIndex from './guide/SectionIndex'
+import PageHeading from './ui/PageHeading'
 
 interface Props {
+  group: string
+  setGroup: (group: string) => void
   packing: PackingItem[]
   setPacking: (items: PackingItem[]) => void
   details: TravelDetails
@@ -23,8 +27,7 @@ function safeLink(input: string) {
   } catch { return undefined }
 }
 
-export default function Guide({ packing, setPacking, details, setDetails }: Props) {
-  const [group, setGroup] = useState(packingGroups[0])
+export default function Guide({ packing, setPacking, details, setDetails, group, setGroup }: Props) {
   const [editing, setEditing] = useState<PackingItem | null>(null)
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
@@ -47,9 +50,8 @@ export default function Guide({ packing, setPacking, details, setDetails }: Prop
   const orderLink = safeLink(details.orderLink)
 
   return <div className="guide-page page-enter">
-    <div className="section-heading"><div><p className="eyebrow">YOUR TRAVEL TOOLBOX</p><h2>旅行工具盒</h2><p className="muted">把準備收進手帳，帶著安心出發。</p></div><ShoppingBag size={28} strokeWidth={1.4} /></div>
-
-    <nav className="guide-quick-nav" aria-label="旅行指南章節">{[{id:'packing-title',label:'行李與購物'},{id:'practical-title',label:'交通與景點'},{id:'guide-coupons',label:'優惠券'},{id:'guide-tax-refund',label:'免稅教學'},{id:'travel-title',label:'旅行資料'},{id:'emergency-title',label:'緊急資訊'}].map(item=><button key={item.id} onClick={()=>document.getElementById(item.id)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}>{item.label}</button>)}</nav>
+    <PageHeading title="旅行手冊" eyebrow="GUIDE"><span className="reading-note">清單與隨身參考</span></PageHeading>
+    <div className="guide-layout"><SectionIndex/><div className="guide-sections">
 
     <section className="panel packing-panel" aria-labelledby="packing-title">
       <div className="section-heading"><h3 id="packing-title"><Backpack size={19} /> 行李與購物清單</h3><button className="icon-button" aria-label="還原預設清單" onClick={() => setResetting(true)}><RotateCcw size={17} /></button></div>
@@ -90,5 +92,6 @@ export default function Guide({ packing, setPacking, details, setDetails }: Prop
     <section className="panel emergency-panel" aria-labelledby="emergency-title"><p className="eyebrow">KEEP THIS CLOSE</p><h3 id="emergency-title">需要幫忙時</h3><div className="emergency-numbers"><a href="tel:110"><Phone size={19} /><span>警察<strong>110</strong></span></a><a href="tel:119"><Phone size={19} /><span>消防・救護車<strong>119</strong></span></a></div><p className="muted small">緊急時先說明所在地點。以下機構的電話及地址尚未查核，因此不預填號碼。</p><div className="emergency-links"><div><strong>台灣駐日本代表處</strong><p className="muted small">聯絡電話、急難救助專線：待確認</p><External href="https://www.roc-taiwan.org/jp/index.html">代表處官方聯絡資訊</External></div><div><strong>仙台當地緊急醫療</strong><p className="muted small">急診機構、夜間服務與外語支援：待確認</p><External href="https://www.city.sendai.jp/">仙台市官方網站</External></div><div><strong>{details.hotel}</strong><p className="muted small">{details.hotelAddress || '飯店地址：待確認，請比對訂房確認信'}</p>{details.hotelPhone && /^\+?[\d ()-]{5,40}$/.test(details.hotelPhone) ? <p><a className="source-link" href={`tel:${details.hotelPhone.replace(/[^+\d]/g, '')}`}><Phone size={14}/>{details.hotelPhone}（自行填寫）</a></p> : <p className="muted small">飯店電話：待確認</p>}<External href="https://www.hotelkeihan.co.jp/sendai/">ホテル京阪 仙台官方網站</External></div></div></section>
 
     <section aria-labelledby="practical-title"><div className="section-heading"><div><p className="eyebrow">A LITTLE LOCAL KNOWLEDGE</p><h3 id="practical-title">仙台實用資訊</h3></div></div><div className="guide-info-grid">{practicalInformation.map(item => <details className="panel info-card" key={item.title}><summary>{item.title}<ChevronDown size={16} /></summary><p>{item.text}</p><External href={item.url}>{item.label}</External><p className="source-date">資料整理：2026/11/05｜2026 最新資訊待確認</p></details>)}</div><div className="panel practical-edit"><label className="field">我的實用資訊補充（可編輯）<textarea rows={5} value={details.practicalNotes ?? ''} maxLength={20000} onChange={e => setDetails({ ...details, practicalNotes: e.target.value })} placeholder="活動日期、退稅流程、分店資訊、楓況、醫療聯絡方式……請記下官方來源與查核日期。未確認內容請保留「待確認」標記。"/></label><p className="source-date">自行整理的資料也會隨完整備份一起保存。請出發前再次核實。</p></div></section>
+    </div></div>
   </div>
 }

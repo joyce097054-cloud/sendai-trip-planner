@@ -115,6 +115,7 @@ test('照片使用 IndexedDB 保存，完整備份能還原照片與旅記', asy
   })
   await card(page, name).locator('input[type=file]').setInputFiles({ name: 'maple.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') })
   await expect(card(page, name).getByRole('img', { name: 'maple.png' })).toBeVisible()
+  await expect(card(page, name).getByRole('img', { name: `${name} 的旅途照片`, exact: true })).toBeVisible()
   await page.reload()
   await card(page, name).getByText('旅記與照片', { exact: true }).click()
   await expect(card(page, name).getByRole('img', { name: 'maple.png' })).toBeVisible()

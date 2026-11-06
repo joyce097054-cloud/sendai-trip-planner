@@ -114,6 +114,8 @@ test('付款人使用真實參與者名稱，自訂分攤必須平衡，儲存�
   expect((requests[0].p_payload as Record<string,unknown>).payer_id).toBe(rain)
   await expect(page.getByRole('heading',{name:'松島午餐',exact:true})).toBeVisible()
   await expect(page.locator('.ledger-summary h3')).toContainText('小林 需要付給 小雨')
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.screenshot({path:'/workspace/scratch/sendai-phase3-ledger-contract-mobile.png',animations:'disabled'})
   const downloaded=page.waitForEvent('download');await page.getByRole('button',{name:'匯出 CSV'}).click()
   expect((await downloaded).suggestedFilename()).toMatch(/\.csv$/)
 })
@@ -235,4 +237,28 @@ test('連結格式錯誤時也能貼上正確連結，背景恢復而不顯示�
   await expect(page.getByRole('heading',{name:'測試私人帳本',exact:true})).toBeVisible()
   expect(stats.signups).toBe(1)
   await expect(page.locator('input[type=email],input[type=password]')).toHaveCount(0)
+})
+
+test('窄手機與鍵盤高度下表單可捲動，關閉後回到新增消費',async({page})=>{
+  const state=base()
+  state.members[0].name='ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMN'
+  state.members[1].name='這是一個用來檢查換行的旅行夥伴顯示名稱'
+  await setup(page,state)
+  await page.setViewportSize({width:320,height:430})
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(320)
+  const trigger=page.getByRole('button',{name:'新增消費',exact:true})
+  await trigger.click()
+  const dialog=page.getByRole('dialog')
+  await dialog.getByLabel('消費名稱').fill('鍵盤操作測試')
+  await dialog.getByLabel('備註（選填）').fill('只驗證表單操作，不送出帳務')
+  const submit=dialog.getByRole('button',{name:'儲存消費',exact:true})
+  await submit.scrollIntoViewIfNeeded()
+  await expect(submit).toBeInViewport()
+  const bounds=(await dialog.boundingBox())!
+  expect(bounds.y).toBeGreaterThanOrEqual(0)
+  expect(bounds.y+bounds.height).toBeLessThanOrEqual(430)
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(320)
+  await page.keyboard.press('Escape')
+  await expect(dialog).toHaveCount(0)
+  await expect(trigger).toBeFocused()
 })
