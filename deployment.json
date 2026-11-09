@@ -1,5 +1,8 @@
 {
   "app": "sendai-trip-planner",
-  "sourceCommit": "686e26747a293839dfba4d6b9d5d114ff4f427e0",
-  "builtAt": "2026-11-05T09:00:18.638Z"
+  "sourceCommit": "650c33d95d51ea8303930967870add614c93fe53",
+  "sourceDirty": false,
+  "pwaVersion": "86d6c806b7f1b278",
+  "ledgerClientConfigured": true,
+  "builtAt": "2026-11-09T08:04:27.065Z"
 }
