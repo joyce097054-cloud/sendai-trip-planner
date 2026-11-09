@@ -12,7 +12,7 @@
 
 私人連結是讀寫帳本的鑰匙，不公開張貼；可以輪替並撤銷其他裝置權限。前端沒有 Secret key，資料庫仍以裝置授權及 RLS 驗證，不開放所有匿名訪客讀寫。舊會員表保留，必要時可由 SQL 管理者安全複製既有帳務，原資料不動。
 
-使用者已確認階段 1、階段 2，並授權階段 3 四頁介面優化；本次改版尚未部署，線上網站仍是先前測試版。詳細的兩裝置測試與限制見 [階段 1 紀錄](docs/phase-1-status.md)，不以測試替身當作實機驗收。原本機 JSON 備份不含雲端帳務；分帳可另匯出 CSV。
+使用者已確認階段 1～3，並授權階段 4 的測試、PWA 與部署準備；本次改版尚未部署，線上網站仍是先前測試版。詳細的兩裝置測試與限制見 [階段 1 紀錄](docs/phase-1-status.md)，不以測試替身當作實機驗收。原本機 JSON 備份不含雲端帳務；分帳可另匯出 CSV。
 
 ## 階段 2：優惠券與免稅教學
 
@@ -24,13 +24,19 @@
 
 色彩、字級、間距、按鈕、表單與焦點規則集中於 `src/styles/`。行程改為大日期與平面時間軸，指南採章節導覽，天氣分開呈現目前模式資料與五日預報，分帳優先顯示結算與兩人的實際付款／負擔。底部四頁導覽貼齊螢幕並保留 Safe Area；切頁保留本次開啟期間的捲動位置、清單分類與天氣地點。
 
-詳見 [設計系統](docs/design-system.md) 與 [階段 3 交付紀錄](docs/phase-3-status.md)。沒有變更既有行程、指南資料、四張原圖或共同帳務的計算與資料存取；階段 4 的真實 iPhone Safari／PWA 實機驗收與部署準備仍待確認後執行。
+詳見 [設計系統](docs/design-system.md) 與 [階段 3 交付紀錄](docs/phase-3-status.md)。沒有變更既有行程、指南資料、四張原圖或共同帳務的計算與資料存取。
+
+## 階段 4：PWA、回歸測試與部署準備
+
+加入主畫面名稱「仙台手帳」、專案內圖示、manifest 與限定靜態檔案的 Service Worker。首次連線下載完成後，行程、清單與四張教學圖可離線重新開啟；天氣及共同帳務仍需網路。頁尾「加入主畫面與離線使用」可查看下載狀態、修復離線內容及檢查更新。更新由使用者決定何時重新載入，不會清除旅記或照片。
+
+本次已通過 43 項單元測試及 58 項 Chromium 瀏覽器測試；真實 iPhone Safari／主畫面模式、正式 Supabase 的完整安全與同步矩陣仍待實測。新增程式不需要重跑 SQL。操作、部署及實機驗收步驟見 [PWA 與部署](docs/pwa-and-deployment.md)，完整結果見 [階段 4 紀錄](docs/phase-4-status.md)。新版尚未發布，需使用者確認後才更新網站。
 
 ## 手機使用：GitHub Pages（初次設定說明）
 
-先前獲准發布的測試版網址是 `https://joyce097054-cloud.github.io/sendai-trip-planner/`，使用者已回報測試無誤。本次階段 3 修改只在開發分支，網址不會自動更新為新版；以下保留初次設定方法。
+先前獲准發布的測試版網址是 `https://joyce097054-cloud.github.io/sendai-trip-planner/`，使用者已回報測試無誤。本次階段 2～4 修改只在開發分支，網址不會自動更新為新版；以下保留初次設定方法。
 
-發布檔案由 `npm run deploy:pages` 建置並推送到獨立的 `gh-pages` 分支，不合併或改寫 `main`。第一次需由專案管理員開啟 [GitHub Pages 設定](https://github.com/joyce097054-cloud/sendai-trip-planner/settings/pages)：
+使用者核准版本後，發布檔案由 `npm run deploy:pages -- --publish` 建置並推送到獨立的 `gh-pages` 分支，不合併或改寫 `main`。只有 `npm run prepare:pages` 會準備本機產物、不發布。第一次需由專案管理員開啟 [GitHub Pages 設定](https://github.com/joyce097054-cloud/sendai-trip-planner/settings/pages)：
 
 1. **Build and deployment → Source** 選 **Deploy from a branch**。
 2. **Branch** 選 **gh-pages**，資料夾選 **/(root)**，按 **Save**。
@@ -39,12 +45,12 @@
 若看不到 Pages 設定或方案不支援，請不要為了部署而自行改變私有儲存庫的可見性，應改選有權限的託管服務。此網站預設沒有登入與密碼；預載的旅行計畫公開可讀。照片、私人筆記、清單修改只存在各裝置的瀏覽器，部署不包含這些使用者內容。
 
 - iPhone：Safari → 分享 → 加入主畫面。
-- Android：Chrome → 選單 → 加入主畫面（此為網站捷徑，非離線安裝保證）。
+- Android：Chrome → 選單 → 加入主畫面；離線內容是否下載完成請在 App 內確認。
 - 不需在手機輸入任何指令。請避免使用聊天 App 的內建瀏覽器，以免資料和 Safari／Chrome 分隔。
-- 從免安裝版或其他網址搬移資料，先匯出 JSON，再到正式網站匯入。不同裝置仍不會自動同步，請定期備份。
-- 已儲存的頁面內容可留在頁面操作，但未實作 Service Worker；首次載入或重新開啟網站仍需網路。
+- 從免安裝版或其他網址搬移資料，先匯出 JSON，再到正式網站匯入。個人行程與照片不跨裝置同步；共同帳務透過私人連結同步。
+- 新版首次載入、離線內容下載與更新需要網路。下載完成後可離線重新開啟本機行程與指南；首次進入 Safari 和主畫面模式請分別確認下載狀態。
 
-更新網站：先將程式變更提交 Git，再執行 `npm run deploy:pages`。腳本檢查乾淨工作目錄、保留既有發布歷史、不強制推送，也拒絕覆寫未標示為此 App 的 `gh-pages`。`dist/deployment.json` 記錄來源提交及建置時間，方便確認上線版本。`npm run deploy:pages -- --prepare-only` 只建置，不推送。
+更新網站：先提交 Git 並取得版本發布確認，再執行 `npm run deploy:pages -- --publish`。腳本檢查乾淨工作目錄與公開 Supabase 設定、保留既有發布歷史、不強制推送，也拒絕覆寫未標示為此 App 的 `gh-pages`。`dist/deployment.json` 記錄來源提交、PWA 版本及建置時間，方便確認上線版本。`npm run prepare:pages` 只建置，不推送；單獨執行 `npm run deploy:pages` 會拒絕操作。
 
 可用 `npm run test:pages` 驗證正式產物在 `/sendai-trip-planner/` 子路徑的手機／桌面操作，避免開發首頁能開、部署卻找不到資源。真實站點仍需另外確認 HTTPS、首頁、插畫、路由與保存功能。
 
@@ -118,6 +124,10 @@ npm test
 # 首次執行瀏覽器測試前：
 npx playwright install chromium
 npm run test:e2e
+npm run test:ledger
+npm run test:pages
+npm run test:portable
+npm run test:pwa
 ```
 
 測試設定會優先使用 Playwright 的 Chromium；此雲端已提供系統 Chromium，下載受限時會自動使用。也可用 `PLAYWRIGHT_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e` 明確指定。
@@ -140,4 +150,4 @@ public/sendai-autumn.svg   專案內建的原創秋日插畫（無外部圖片�
 tests/app.spec.ts         瀏覽器整合測試
 ```
 
-字體優先使用 Zen Maru Gothic；未安裝時使用 Noto Sans TC、蘋方、微軟正黑體等本機中文字型。沒有外部字體請求，離線已載入頁面仍可操作本機資料；本專案尚未加入 Service Worker，網路版本首次載入仍需可用的網站；電腦免安裝版已內含所有程式資源。
+字體優先使用 Zen Maru Gothic；未安裝時使用 Noto Sans TC、蘋方、微軟正黑體等本機中文字型。沒有外部字體請求。正式網路版首次載入與靜態離線內容下載需網路；電腦免安裝版已內含程式資源，不啟用 Service Worker。

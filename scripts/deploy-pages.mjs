@@ -1,11 +1,14 @@
 import { spawnSync } from 'node:child_process'
-import { mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { resolve } from 'node:path'
+import { loadEnv } from 'vite'
 
 const root = resolve(import.meta.dirname, '..')
 const dist = resolve(root, 'dist')
 const prepareOnly = process.argv.includes('--prepare-only')
+const publish = process.argv.includes('--publish')
+if ((!prepareOnly && !publish) || (prepareOnly && publish)) throw new Error('Use npm run prepare:pages to prepare only. Publishing requires npm run deploy:pages -- --publish after review.')
 function run(program, args, options = {}) {
   const result = spawnSync(program, args, { cwd: root, encoding: 'utf8', stdio: 'pipe', ...options })
   if (result.error) throw result.error
@@ -14,7 +17,17 @@ function run(program, args, options = {}) {
 }
 
 const sourceCommit = run('git', ['rev-parse', 'HEAD'])
-if (!prepareOnly && run('git', ['status', '--porcelain'])) throw new Error('Commit source changes before publishing, so the deployed source is reviewable.')
+const sourceDirty = Boolean(run('git', ['status', '--porcelain']))
+if (!prepareOnly && sourceDirty) throw new Error('Commit source changes before publishing, so the deployed source is reviewable.')
+const settings = loadEnv('production', root, 'VITE_')
+const publicUrl = (process.env.VITE_SUPABASE_URL ?? settings.VITE_SUPABASE_URL ?? '').trim()
+const publicKey = (process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? settings.VITE_SUPABASE_PUBLISHABLE_KEY ?? '').trim()
+let ledgerClientConfigured = false
+try {
+  const url = new URL(publicUrl)
+  ledgerClientConfigured = Boolean(publicKey) && url.protocol === 'https:' && url.pathname === '/' && !url.search && !url.hash && !url.username && !url.password
+} catch { /* Report only readiness, never credential values. */ }
+if (publish && !ledgerClientConfigured) throw new Error('Production ledger client settings are missing or invalid. Set VITE_SUPABASE_URL to the HTTPS project root and use the public publishable key before publishing.')
 let previous = ''
 if (!prepareOnly) {
   const remote = run('git', ['ls-remote', 'origin', 'refs/heads/gh-pages'])
@@ -29,7 +42,8 @@ if (!prepareOnly) {
 }
 console.log(process.platform === 'win32' ? run('cmd.exe', ['/d', '/s', '/c', 'npm run build']) : run('npm', ['run', 'build']))
 await writeFile(resolve(dist, '.nojekyll'), '')
-await writeFile(resolve(dist, 'deployment.json'), JSON.stringify({ app: 'sendai-trip-planner', sourceCommit, builtAt: new Date().toISOString() }, null, 2))
+const pwa = JSON.parse(await readFile(resolve(dist, 'pwa-build.json'), 'utf8'))
+await writeFile(resolve(dist, 'deployment.json'), JSON.stringify({ app: 'sendai-trip-planner', sourceCommit, sourceDirty, pwaVersion: pwa.version, ledgerClientConfigured, builtAt: new Date().toISOString() }, null, 2))
 if (prepareOnly) {
   console.log('Pages artifact prepared in dist/. No branch was pushed and no website was enabled.')
 } else {

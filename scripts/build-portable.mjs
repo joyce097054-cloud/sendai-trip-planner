@@ -28,11 +28,20 @@ for (const path of guidePaths) {
   if (!mime) throw new Error('Unsupported guide image format')
   guideImages[path] = `data:${mime};base64,${bytes.toString('base64')}`
 }
-javascript = `globalThis.__SENDAI_GUIDE_IMAGES__=${JSON.stringify(guideImages)};\n${javascript}`
+javascript = `globalThis.__SENDAI_PORTABLE__=true;globalThis.__SENDAI_GUIDE_IMAGES__=${JSON.stringify(guideImages)};\n${javascript}`
 javascript = javascript.replaceAll(hero, JSON.stringify(image)).replace(/<\/script/gi, '<\\/script')
 const css = (await readFile(asset(stylesheet[1]), 'utf8')).replace(/<\/style/gi, '<\\/style')
 html = html.replace(script[0], () => `<script type="module">${javascript}</script>`)
 html = html.replace(stylesheet[0], () => `<style>${css}</style>`)
+// A standalone desktop file must not register a worker or request a manifest.
+html = html.replace(/<link\b[^>]*rel="manifest"[^>]*>/g, '')
+for (const match of html.matchAll(/<link\b[^>]*rel="(?:icon|apple-touch-icon)"[^>]*>/g)) {
+  const href = match[0].match(/href="([^"]+)"/)?.[1]
+  if (!href) continue
+  const bytes = await readFile(asset(href))
+  const mime = href.endsWith('.svg') ? 'image/svg+xml' : 'image/png'
+  html = html.replace(match[0], () => match[0].replace(href, `data:${mime};base64,${bytes.toString('base64')}`))
+}
 await mkdir(resolve(root, 'portable'), { recursive: true })
 await writeFile(resolve(root, 'portable/sendai-travel-journal.html'), html)
 await writeFile(resolve(root, 'portable/請先閱讀.txt'), '\uFEFF仙台賞楓五日自由行 — Windows 免安裝版\r\n\r\n1. 將壓縮檔解壓縮到固定資料夾。\r\n2. 對 sendai-travel-journal.html 按右鍵 → 開啟檔案 → Microsoft Edge 或 Google Chrome。\r\n3. 不需要安裝程式或輸入任何指令。\r\n\r\n請固定使用相同瀏覽器、相同檔名與位置。移動或更名、換瀏覽器、清除資料前，先按右上角「資料備份」匯出 JSON（包含照片）。資料不會自動同步到手機或其他電腦。\r\n天氣和 Google Maps 需要網路；行程、清單與旅記不需伺服器。手機上的檔案預覽可能不執行程式；這份免安裝版是給電腦瀏覽器使用。\r\n\r\n這不是公開網站，未部署至網際網路。\r\n')

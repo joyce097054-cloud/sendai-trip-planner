@@ -38,3 +38,12 @@
 .brand { min-height: 44px; }
 @media(max-width:640px) { .trip-header:not(.trip-header-compact) .eyebrow { display: none; } .hero-art { display: none; } }
 .trip-hotel > span { min-width: 0; overflow-wrap: anywhere; }
+.pwa-notices:empty { display: none; }
+.pwa-notices > .notice { margin-top: 20px; }
+.pwa-offline { display: flex; align-items: flex-start; gap: 12px; }
+.pwa-offline svg { margin-top: 4px; }
+.pwa-update .button-row { margin-top: 12px; }
+.pwa-help-trigger { flex-basis: 100%; justify-content: center; font-size: 12px; }
+.pwa-help h3 { font-size: 18px; }
+.pwa-help ol { list-style: decimal; padding-left: 24px; }
+.pwa-help li { padding-block: 6px; }

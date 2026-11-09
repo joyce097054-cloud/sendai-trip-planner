@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>仙台手帳</title>
+  <rect width="512" height="512" fill="#FAF8F4"/>
+  <path d="M160 350C120 282 151 207 236 190C292 179 331 149 357 111C380 208 382 285 335 337C290 390 205 396 160 350Z" fill="#F6EDE5" stroke="#9C512B" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M149 388C198 304 253 236 328 182M207 306L201 250M245 263L299 268" fill="none" stroke="#9C512B" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
