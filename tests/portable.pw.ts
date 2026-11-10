@@ -14,7 +14,7 @@ test('單檔 HTML 無外部資源，行程、照片與完整備份可保存還�
   await page.route('**/*', route => route.request().url() === url ? route.fulfill({ contentType: 'text/html; charset=utf-8', body: html }) : route.abort())
   await page.goto(url)
   await expect(page.getByRole('heading', { level: 1 })).toContainText('仙台賞楓')
-  await expect(page.locator('.stop-row')).toHaveCount(5)
+  await expect(page.locator('.stop-row')).toHaveCount(9)
   await expect(page.locator('.hero-art')).toBeVisible()
   expect(await page.locator('.hero-art').evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0)
   await page.getByRole('button', { name: '新增一段旅程' }).click()
@@ -48,7 +48,7 @@ test('單檔 HTML 無外部資源，行程、照片與完整備份可保存還�
   await card.getByText('旅記與照片', { exact: true }).click()
   await expect(card.getByRole('img', { name: 'autumn.png' })).toBeVisible()
   await page.getByRole('navigation', { name: '主導覽' }).getByRole('link', { name: '指南 Guide' }).click()
-  await expect(page.getByRole('heading', { name: '隨手帶著的優惠券', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '日本優惠券', exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: '日本免稅與新退稅手冊', exact: true })).toBeVisible()
   await expect(page.locator('.merchant-row')).toHaveCount(21)
   // Exercise actual user originals, embedded by the portable builder. No image

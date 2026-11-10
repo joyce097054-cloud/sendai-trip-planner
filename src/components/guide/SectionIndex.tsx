@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 
 const sections = [
-  { id: 'packing-title', label: '行李與購物' },
-  { id: 'practical-title', label: '交通與景點' },
-  { id: 'guide-coupons', label: '優惠券' },
-  { id: 'guide-tax-refund', label: '免稅教學' },
-  { id: 'travel-title', label: '旅行資料' },
-  { id: 'reminders-title', label: '旅遊注意事項' },
-  { id: 'emergency-title', label: '緊急資訊' },
+ {id:'guide-packing',label:'行李打包清單'},
+ {id:'guide-shopping',label:'日本購物清單'},
+ {id:'guide-coupons',label:'日本優惠券'},
+ {id:'guide-reminders',label:'日本旅遊提醒'},
+ {id:'emergency-title',label:'緊急資訊'},
+ {id:'travel-title',label:'旅行資料總匯'},
 ]
 
 export default function SectionIndex() {

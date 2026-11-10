@@ -1,29 +1,210 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-06",
+  "updatedAt": "2026-11-10",
   "categories": [
     "Bic Camera",
     "藥妝",
     "百貨",
+    "眼鏡",
     "電器／其他"
   ],
   "items": [
     {
-      "id": "example-bic-camera",
-      "shopName": "Bic Camera",
-      "category": "Bic Camera",
-      "offerSummary": "範例欄位：優惠內容待提供，這不是真實優惠券",
-      "imagePath": null,
+      "id": "tsuruha",
+      "shopName": "鶴羽 TSURUHA DRUG",
+      "category": "藥妝",
+      "offerSummary": "券面：依含稅購買額享 3%／5%／7% 折扣",
+      "imagePath": "/coupons/tsuruha.png",
+      "images": [
+        "/coupons/tsuruha.png"
+      ],
       "instructions": [
-        "收到使用者提供的真實券圖後，才會在此顯示。"
+        "結帳前在 App 內開啟完整原圖，依店員指示出示。",
+        "券面內容已由使用者原圖整理；2026 年新退稅制度下的受理方式、分店與排除條件仍待店家確認。"
       ],
       "conditions": [
-        "僅供示範資料結構，不可出示使用。"
+        "券面門檻為含稅 ¥10,000～29,999、¥30,000～49,999、¥50,000 以上。",
+        "限免稅對象，付款前出示並提供護照；部分商品不適用，不可兌現。"
+      ],
+      "validFrom": null,
+      "validUntil": "2027-12-31",
+      "sourceNotes": "使用者 2026/11/10 提供「日本優惠券.zip」內 鶴羽 TSURUHA DRUG.png；原始圖片未裁切、未改條碼。期限與文案依券面整理，非官方即時查核。",
+      "isExample": false,
+      "kind": "static"
+    },
+    {
+      "id": "bic-camera",
+      "shopName": "Bic Camera",
+      "category": "Bic Camera",
+      "offerSummary": "券面：家電等 7%、日用品等 5%、指定清酒 3% 折扣",
+      "imagePath": "/coupons/bic-camera.png",
+      "images": [
+        "/coupons/bic-camera.png"
+      ],
+      "instructions": [
+        "結帳前在 App 內開啟完整原圖，依店員指示出示。",
+        "券面內容已由使用者原圖整理；2026 年新退稅制度下的受理方式、分店與排除條件仍待店家確認。"
+      ],
+      "conditions": [
+        "限免稅結帳；優惠後購買額須達 ¥5,000。",
+        "請出示完整兩組條碼；Apple、指定品牌／商品及其他排除項目依券面。",
+        "免稅改制後適用方式以店家當次結帳規則為準。"
+      ],
+      "validFrom": null,
+      "validUntil": "2027-04-30",
+      "sourceNotes": "使用者 2026/11/10 提供「日本優惠券.zip」內 BIC CAMERA.png；原始圖片未裁切、未改條碼。期限與文案依券面整理，非官方即時查核。",
+      "isExample": false,
+      "kind": "static"
+    },
+    {
+      "id": "sundrug",
+      "shopName": "Sundrug",
+      "category": "藥妝",
+      "offerSummary": "券面：依未稅購買額享 3%／5%／7% 折扣",
+      "imagePath": "/coupons/sundrug.png",
+      "images": [
+        "/coupons/sundrug.png"
+      ],
+      "instructions": [
+        "結帳前在 App 內開啟完整原圖，依店員指示出示。",
+        "券面內容已由使用者原圖整理；2026 年新退稅制度下的受理方式、分店與排除條件仍待店家確認。"
+      ],
+      "conditions": [
+        "未稅購買額 ¥10,000／30,000／50,000 以上對應 3%／5%／7%。",
+        "限免稅結算，不能與其他優惠並用；部分品牌及 Direx 店不適用。"
+      ],
+      "validFrom": null,
+      "validUntil": "2026-12-31",
+      "sourceNotes": "使用者 2026/11/10 提供「日本優惠券.zip」內 Sundrug.png；原始圖片未裁切、未改條碼。期限與文案依券面整理，非官方即時查核。",
+      "isExample": false,
+      "kind": "static"
+    },
+    {
+      "id": "jins",
+      "shopName": "JINS",
+      "category": "眼鏡",
+      "offerSummary": "券面：免稅＋5% 優惠券",
+      "imagePath": "/coupons/jins.jpg",
+      "images": [
+        "/coupons/jins.jpg"
+      ],
+      "instructions": [
+        "結帳前在 App 內開啟完整原圖，依店員指示出示。",
+        "券面內容已由使用者原圖整理；2026 年新退稅制度下的受理方式、分店與排除條件仍待店家確認。"
+      ],
+      "conditions": [
+        "限日本部分 JINS 免稅店，每筆交易限用一次。",
+        "不能與免稅以外優惠併用，不適用已折扣或指定商品。"
+      ],
+      "validFrom": null,
+      "validUntil": "2027-08-31",
+      "sourceNotes": "使用者 2026/11/10 提供「日本優惠券.zip」內 JINS.jpg；原始圖片未裁切、未改條碼。期限與文案依券面整理，非官方即時查核。",
+      "isExample": false,
+      "kind": "static"
+    },
+    {
+      "id": "kokumin",
+      "shopName": "KokuMiN Drug",
+      "category": "藥妝",
+      "offerSummary": "券面：依未稅金額享 5% 或 8% 折扣",
+      "imagePath": "/coupons/kokumin.jpg",
+      "images": [
+        "/coupons/kokumin.jpg"
+      ],
+      "instructions": [
+        "結帳前在 App 內開啟完整原圖，依店員指示出示。",
+        "券面內容已由使用者原圖整理；2026 年新退稅制度下的受理方式、分店與排除條件仍待店家確認。"
+      ],
+      "conditions": [
+        "未稅滿 ¥10,000 未滿 ¥30,000：5%；未稅滿 ¥30,000：8%。",
+        "限國民藥品免稅店；Welcia 藥局不提供，部分商品排除。",
+        "券面標示退稅扣除規定手續費；實際規則以當次退款明細為準。"
+      ],
+      "validFrom": null,
+      "validUntil": "2027-12-31",
+      "sourceNotes": "使用者 2026/11/10 提供「日本優惠券.zip」內 KokuMiN Drug.jpg；原始圖片未裁切、未改條碼。期限與文案依券面整理，非官方即時查核。",
+      "isExample": false,
+      "kind": "static"
+    },
+    {
+      "id": "lotte",
+      "shopName": "LOTTE DUTY FREE GINZA",
+      "category": "百貨",
+      "offerSummary": "券面：滿 ¥10,000 折 ¥1,000；滿 ¥20,000 折 ¥2,000",
+      "imagePath": "/coupons/lotte-ginza.jpg",
+      "images": [
+        "/coupons/lotte-ginza.jpg"
+      ],
+      "instructions": [
+        "結帳前在 App 內開啟完整原圖，依店員指示出示。",
+        "券面內容已由使用者原圖整理；2026 年新退稅制度下的受理方式、分店與排除條件仍待店家確認。"
+      ],
+      "conditions": [
+        "僅限東京銀座店，並非仙台店／機場券。",
+        "券面要求 60 日內由羽田或成田出境；本行程由仙台出境，適用性待店家確認，不可預設可用。",
+        "每次出境限用一次，不與其他優惠併用，不適用折扣／指定商品。"
+      ],
+      "validFrom": "2025-12-01",
+      "validUntil": "2026-11-30",
+      "sourceNotes": "使用者 2026/11/10 提供「日本優惠券.zip」內 LOTTE DUTY FREE JAPAN.jpg；原始圖片未裁切、未改條碼。期限與文案依券面整理，非官方即時查核。",
+      "isExample": false,
+      "kind": "static"
+    },
+    {
+      "id": "donki",
+      "shopName": "唐吉訶德 DON DON DONKI",
+      "category": "藥妝",
+      "offerSummary": "開啟官方免稅優惠券",
+      "imagePath": "/coupons/donki-logo.jpg",
+      "instructions": [
+        "需連線，啟用與核銷均在官方網頁完成；Logo 不是優惠券。"
+      ],
+      "conditions": [
+        "有效期間與使用條件以官方動態網頁為準。"
       ],
       "validFrom": null,
       "validUntil": null,
-      "sourceNotes": "範例資料；未提供優惠券圖片或有效條件。",
-      "isExample": true
+      "sourceNotes": "使用者提供 DONKI.jpg 作為入口 Logo，保留原 JPG，沒有轉成 PNG。",
+      "isExample": false,
+      "kind": "external",
+      "externalUrl": "https://japanportal.donki-global.com/coupon/cp001_zhtw.html"
+    }
+  ],
+  "sources": [
+    {
+      "path": "/coupons/tsuruha.png",
+      "sourceFilename": "鶴羽 TSURUHA DRUG.png",
+      "sha256": "fd1ebab1714cc2f7a87e6e9cac84b41334f1aa9d0ff4abab68d5fc0d0d160dd4"
+    },
+    {
+      "path": "/coupons/bic-camera.png",
+      "sourceFilename": "BIC CAMERA.png",
+      "sha256": "e7d87dc43db352e7ecb3bb30894a484a6db87280e4127289f5839fd5f1e7dbce"
+    },
+    {
+      "path": "/coupons/sundrug.png",
+      "sourceFilename": "Sundrug.png",
+      "sha256": "dbdc2df9278b7d3f98c1b6ad8853fd6968aea61f02a68a9d78c1e452b1a017c8"
+    },
+    {
+      "path": "/coupons/jins.jpg",
+      "sourceFilename": "JINS.jpg",
+      "sha256": "98573bf60560a156b78d193ab7d46c3885aadd112b82179be03f0e975f143f7e"
+    },
+    {
+      "path": "/coupons/kokumin.jpg",
+      "sourceFilename": "KokuMiN Drug.jpg",
+      "sha256": "a6481906fa969dcb6c47a8d2f53bcb944ac42dbc9c55c067ed2415cd68437b57"
+    },
+    {
+      "path": "/coupons/lotte-ginza.jpg",
+      "sourceFilename": "LOTTE DUTY FREE JAPAN.jpg",
+      "sha256": "68cfcc1639389e0192d6f2101feaeaef23c0178c29ed37712a40f57452bc26a7"
+    },
+    {
+      "path": "/coupons/donki-logo.jpg",
+      "sourceFilename": "DONKI.jpg",
+      "sha256": "453ce7b97bb7fd35014cd09385616eea92dc16fc80e7c5a36b69a3e767abc23a"
     }
   ]
 }

@@ -77,7 +77,14 @@ test('離線重新開啟保留行程、照片與筆記，四張教學圖可放�
     await expect(dialog.locator('output')).toHaveText('150%')
     await page.keyboard.press('Escape')
   }
-  const packed = page.getByLabel('護照、入境資料', { exact: true })
+  for(const name of ['鶴羽 TSURUHA DRUG','Bic Camera','Sundrug','JINS','KokuMiN Drug','LOTTE DUTY FREE GINZA']) {
+    await page.getByRole('button',{name:`查看 ${name} 優惠券`,exact:true}).click()
+    const dialog=page.getByRole('dialog');await expect.poll(()=>dialog.locator('.media-scroll img').evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBeGreaterThan(100)
+    await dialog.getByRole('button',{name:'關閉',exact:true}).click()
+  }
+  const donki=page.getByRole('link',{name:'唐吉訶德 DON DON DONKI 開啟官方免稅優惠券',exact:true})
+  await expect(donki).toHaveAttribute('aria-disabled','true');await expect(donki).toContainText('此優惠券需要網路連線');await donki.click({force:true});expect(page.context().pages()).toHaveLength(1)
+  const packed = page.getByLabel('護照', { exact: true })
   await packed.check()
   await page.reload()
   await expect(packed).toBeChecked()

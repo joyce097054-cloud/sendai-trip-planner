@@ -1,0 +1,4 @@
+import { defineConfig,chromium } from '@playwright/test'
+import {existsSync} from 'node:fs'
+const executablePath=process.env.PLAYWRIGHT_EXECUTABLE_PATH??(!existsSync(chromium.executablePath())&&existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined)
+export default defineConfig({outputDir:'test-results/shopping',testDir:'./tests',testMatch:'shopping.pw.ts',workers:1,timeout:30000,reporter:'list',use:{baseURL:'http://127.0.0.1:5178',launchOptions:{executablePath},viewport:{width:390,height:844},isMobile:true,hasTouch:true,trace:'retain-on-failure',screenshot:'only-on-failure'},webServer:{command:'npm run dev -- --host 127.0.0.1 --port 5178 --strictPort',url:'http://127.0.0.1:5178',reuseExistingServer:false,env:{VITE_SUPABASE_URL:'http://127.0.0.1:54321',VITE_SUPABASE_PUBLISHABLE_KEY:'sb_publishable_shopping_contract_only'}}})

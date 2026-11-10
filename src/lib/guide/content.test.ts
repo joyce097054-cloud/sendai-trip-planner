@@ -45,7 +45,9 @@ describe('指南內容與優惠券日期', () => {
   })
   it('正式資料沒有冒充真實優惠券，教學的來源與未確認狀態明確', () => {
     expect(coupons).not.toBeNull()
-    expect(coupons!.items.every(c => c.isExample && c.imagePath === null)).toBe(true)
+    expect(coupons!.items.filter(c=>c.kind!=='external')).toHaveLength(6)
+    expect(coupons!.items.every(c=>!c.isExample&&localImagePath(c.imagePath))).toBe(true)
+    expect(coupons!.items.find(c=>c.id==='donki')?.externalUrl).toBe('https://japanportal.donki-global.com/coupon/cp001_zhtw.html')
     expect(tax.sections).toHaveLength(4)
     expect(tax.sections.every(s => localImagePath(s.image.path) && s.rawText.length > 0)).toBe(true)
     expect(tax.officialVerifiedAt).toBeNull()

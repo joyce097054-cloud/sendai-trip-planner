@@ -1,34 +1,19 @@
 # 指南內容、券圖與教學圖維護
 
-更新：2026/11/06（台灣時間）。階段 2 的程式、文字與四張教學原圖已整合。原圖由使用者的 ZIP 提供，保留原始 JPG 位元組；真實優惠券圖尚未提供。本版不包含生成的優惠券或教學圖。
+更新：2026/11/10（台灣時間）。四張免稅教學原圖保留原始 JPG，本次再匯入使用者提供的六張優惠券及 DONKI 品牌入口；沒有生成或替代券圖。
 
-## 新增一張真實優惠券
+## 管理目前的優惠券
 
-1. 將你自行截圖或下載的 JPG、PNG、WebP 放入 `public/coupons/`。檔名使用英文字母、數字與連字號，例如 `bic-camera-202611.jpg`；可用子資料夾。
-2. 開啟 `src/data/coupons.json`，在 `items` 新增一筆，保留其他券。`id` 必須唯一；`category` 使用上方 `categories` 中的分類。初始分類為 Bic Camera、藥妝、百貨、電器／其他。
-3. 填妥以下欄位；資訊未知時明寫「待確認」，日期未知用 `null`。日期以日本當地日期為準，格式 `YYYY-MM-DD`。
+2026/11/10 已將「日本優惠券.zip」的 7 張原圖匯入：6 張券（鶴羽、Bic Camera、Sundrug、JINS、KokuMiN、LOTTE GINZA）及 DONKI 品牌入口 JPG，已移除舊範例。原位元組與完整條碼保留。詳見 [本次交付](november-update.md)。
 
-| 欄位 | 填寫方式 |
-| --- | --- |
-| `id` | 唯一代碼，例如 `bic-camera-202611` |
-| `shopName` | 券上實際店名 |
-| `category` | `categories` 中的一個分類 |
-| `offerSummary` | 券面實際優惠簡述，不自行推定優惠率 |
-| `imagePath` | `/coupons/bic-camera-202611.jpg`，不含 `public`；未取得圖片時為 `null` |
-| `instructions` | 字串陣列，逐項記錄使用步驟 |
-| `conditions` | 字串陣列，記錄分店、金額、排除項目等實際條件 |
-| `validFrom`、`validUntil` | 開始及結束日期，未知為 `null` |
-| `sourceNotes` | 來源與取得日期等追溯資訊，App 只顯示文字，不作為跳轉入口 |
-| `isExample` | 真實券為 `false`；範例／佔位資料為 `true` |
+1. 將自行取得的原始 JPG／PNG／WebP 放入 `public/coupons/`，用英數檔名，不裁切條碼或轉格式。
+2. 在 `src/data/coupons.json` 的 `items` 加入唯一 id，填 `shopName`、`category`、`offerSummary`、`instructions`、`conditions`、`validFrom`、`validUntil`、`sourceNotes` 與 `isExample: false`。未知條件寫待確認，未知日期用 null。
+3. 靜態券用 `kind: "static"`，`imagePath` 為封面，`images` 按順序列出全部 `/coupons/...` 原圖。多張時顯示切換按鈕，未放大時可左右滑動；現有 ZIP 每店只有一張。
+4. 動態券用 `kind: "external"`、`imagePath` 作品牌入口圖、`externalUrl` 為官方 HTTPS 網址。唐吉訶德使用需求指定網址，不可將 Logo 當核銷券；離線不能開啟。
+5. `sources` 填原檔名與圖片 SHA-256，更新 `updatedAt`，執行 `npm run check:guide`／`npm run build`。更新圖片先備份原檔與提交，保留來源追溯。
+6. 開啟原圖核對比例、有效日期、優惠條件及縮放。截止日以日本日期判斷，過期不自動刪除，明示已過期。
 
-4. 更新檔案頂端 `updatedAt`，執行 `npm run check:guide` 與 `npm run build`。
-5. 在指南的「優惠券」開啟該券，確認完整圖片、放大、使用條件及有效期間都正確。若資料有誤，先改回範例或移除該筆，避免誤用。
-
-目前只放一筆明確的 Bic Camera 範例，`isExample: true`、`imagePath: null`，不能出示使用；收到真實券後可刪除這筆範例。不要把範例改成真實券，卻仍保留範例內容。
-
-有效期限涵蓋截止日當天，日本日期進入翌日便標示「已過期」。尚未開始顯示「尚未生效」，未填截止日顯示「有效期限待確認」。標示日期仍不代表店家保證接受使用。切回 App 或背景恢復時會更新判斷。
-
-圖片只接受專案內 `/coupons/` 或 `/tax-refund/` 的 JPG／PNG／WebP，不使用外站圖、iframe、SVG、相對跳脫路徑。優惠券詳情留在 App 內，可用縮放按鈕與捲動查看、關閉或 Escape 返回。圖片載入失敗時仍可讀取條件。
+券面內容已整理但未獨立查核新制下的受理方式；不把券面期限當成現場保證。LOTTE 為銀座店且列有羽田／成田出境條件，這次仙台出境不可預設適用。若未來公開部署，靜態券圖也可能被公開存取。
 
 ## 四張教學原圖
 

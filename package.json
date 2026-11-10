@@ -20,7 +20,9 @@
     "check:guide": "node scripts/check-guide-assets.mjs",
     "icons:generate": "node scripts/generate-icons.mjs",
     "test:pwa": "npm run build && playwright test --config playwright.pwa.config.ts",
-    "prepare:pages": "node scripts/deploy-pages.mjs --prepare-only"
+    "prepare:pages": "node scripts/deploy-pages.mjs --prepare-only",
+    "test:shopping:db": "node scripts/test-shopping-db.mjs",
+    "test:shopping": "playwright test --config playwright.shopping.config.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
@@ -29,6 +31,7 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@playwright/test": "^1.56.0",
     "@tailwindcss/vite": "^4.1.0",
     "@types/pg": "^8.23.1",

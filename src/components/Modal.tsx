@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
-export default function Modal({ title, children, onClose }: { title: string; children: ReactNode; onClose: () => void }) {
+export default function Modal({ title, children, onClose, fullScreen = false }: { title: string; children: ReactNode; onClose: () => void; fullScreen?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null)
   const previousFocus = useRef(document.activeElement)
   const titleId = useId()
@@ -25,5 +25,5 @@ export default function Modal({ title, children, onClose }: { title: string; chi
       if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true })
     }
   }, [])
-  return <dialog ref={ref} className="modal" onCancel={e => { e.preventDefault(); onClose() }} aria-labelledby={titleId} onClick={e => { if (e.target === e.currentTarget) onClose() }}><div className="modal-inner"><div className="section-heading modal-heading"><h2 id={titleId}>{title}</h2><button className="icon-button" onClick={onClose} aria-label="關閉"><X size={20} aria-hidden="true"/></button></div>{children}</div></dialog>
+  return <dialog ref={ref} className={`modal${fullScreen?' media-fullscreen':''}`} onCancel={e => { e.preventDefault(); onClose() }} aria-labelledby={titleId} onClick={e => { if (e.target === e.currentTarget) onClose() }}><div className="modal-inner"><div className="section-heading modal-heading"><h2 id={titleId}>{title}</h2><button className="icon-button" onClick={onClose} aria-label="關閉"><X size={20} aria-hidden="true"/></button></div>{children}</div></dialog>
 }

@@ -1,0 +1,7 @@
+import { useEffect, useState } from 'react'
+const KEY='sendai-maple-animation'
+export default function MapleLeaves(){
+ const [enabled,setEnabled]=useState(()=>{try{return localStorage.getItem(KEY)!=='off'}catch{return true}}),[reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches),[hidden,setHidden]=useState(document.hidden),[error,setError]=useState('')
+ useEffect(()=>{const m=matchMedia('(prefers-reduced-motion: reduce)'),changed=()=>setReduced(m.matches),visibility=()=>setHidden(document.hidden);m.addEventListener('change',changed);document.addEventListener('visibilitychange',visibility);return()=>{m.removeEventListener('change',changed);document.removeEventListener('visibilitychange',visibility)}},[])
+ return <><label className="maple-toggle"><input type="checkbox" checked={enabled} onChange={e=>{const next=e.target.checked;setEnabled(next);try{localStorage.setItem(KEY,next?'on':'off');setError('')}catch{setError('動畫偏好無法保存，此次仍可切換。')}}}/>楓葉動畫{reduced&&<small>依系統減少動態效果暫停</small>}</label>{error&&<small role="status">{error}</small>}{enabled&&!reduced&&<div className="maple-layer" data-paused={hidden} aria-hidden="true">{[0,1,2,3].map(i=><span className={`maple-fall maple-${i}`} key={i}><svg viewBox="0 0 48 48" className="maple-leaf"><path d="m24 3 4 13 8-7-2 12 10-2-8 10 4 5-13-1-3 12-2-12-13 1 4-5L4 19l10 2-2-12 8 7Z" fill="currentColor"/><path d="M24 17v27M13 24l11 8 11-8" fill="none" stroke="currentColor" strokeWidth="1.5"/></svg></span>)}</div>}</>
+}

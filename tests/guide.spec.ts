@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
 
-const couponSection = (page: Page) => page.getByRole('region', { name: '隨手帶著的優惠券' })
+const couponSection = (page: Page) => page.getByRole('region', { name: '日本優惠券' })
 const taxSection = (page: Page) => page.getByRole('region', { name: '日本免稅與新退稅手冊' })
 
 // These fixtures exist only in intercepted browser requests. They are never written to public/ or production JSON.
@@ -9,7 +9,7 @@ async function imageFixture(page: Page, broken = false) {
   const fixtureCoupon = {
     version: 1, updatedAt: '2026-11-05', categories: ['Bic Camera', '藥妝'], items: [{
       id: 'browser-test-only', shopName: '測試券（非真券）', category: 'Bic Camera',
-      offerSummary: '只用於驗證圖片放大', imagePath: '/coupons/ui-test.png',
+      offerSummary: '只用於驗證圖片放大', imagePath: '/coupons/ui-test.png', images: ['/coupons/ui-test.png','/coupons/ui-test-2.png'],
       instructions: ['測試使用說明'], conditions: ['不能出示使用'], validFrom: '2020-01-01', validUntil: '2020-01-02',
       sourceNotes: '自動測試攔截資料', isExample: false,
     }],
@@ -19,30 +19,24 @@ async function imageFixture(page: Page, broken = false) {
   await page.route('**/src/data/coupons.json*', route => route.fulfill({ contentType: 'text/javascript', body: `export default ${JSON.stringify(fixtureCoupon)}` }))
   await page.route('**/src/data/tax-refund.json*', route => route.fulfill({ contentType: 'text/javascript', body: `export default ${JSON.stringify(teaching)}` }))
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aZ1kAAAAASUVORK5CYII=', 'base64')
-  for (const path of ['**/coupons/ui-test.png', '**/tax-refund/01-platforms.jpg']) {
+  for (const path of ['**/coupons/ui-test.png', '**/coupons/ui-test-2.png', '**/tax-refund/01-platforms.jpg']) {
     await page.route(path, route => broken ? route.fulfill({ status: 404, body: 'test missing asset' }) : route.fulfill({ contentType: 'image/png', body: png }))
   }
 }
 
-test('指南優惠券範例與空分類清楚，詳細內容留在 App 內', async ({ page }) => {
-  await page.goto('/#guide')
-  const coupons = couponSection(page)
-  await expect(coupons.getByText('0 張真實券資料')).toBeVisible()
-  await expect(coupons.getByText('範例・不可使用', { exact: true })).toBeVisible()
-  await coupons.getByRole('button', { name: '藥妝', exact: true }).click()
-  await expect(coupons.getByText('這個分類還沒有優惠券。')).toBeVisible()
-  await coupons.getByRole('button', { name: '全部', exact: true }).click()
-  const entry = coupons.getByRole('button', { name: '查看 Bic Camera 優惠券（範例）', exact: true })
-  await entry.click()
-  const dialog = page.getByRole('dialog')
-  await expect(dialog.getByText('這是範例資料，不是真實優惠券。')).toBeVisible()
-  await expect(dialog.getByText('目前沒有優惠券圖片；這筆資料不可當作真實優惠券使用。')).toBeVisible()
-  await expect(dialog.locator('a, iframe')).toHaveCount(0)
-  expect(page.context().pages()).toHaveLength(1)
-  await page.keyboard.press('Escape')
-  await expect(dialog).toHaveCount(0)
-  await expect(entry).toBeFocused()
-  await expect(page).toHaveURL(/#guide$/)
+test('使用者原始優惠券與動態券入口正確，詳細內容留在 App 內',async({page})=>{
+ await page.goto('/#guide');const coupons=couponSection(page)
+ await expect(coupons.getByText('6 張原始優惠券')).toBeVisible()
+ await expect(coupons.getByText('範例・不可使用',{exact:true})).toHaveCount(0)
+ await coupons.getByRole('button',{name:'眼鏡',exact:true}).click()
+ await expect(coupons.locator('.coupon-list > li')).toHaveCount(1)
+ await coupons.getByRole('button',{name:'查看 JINS 優惠券',exact:true}).click()
+ const dialog=page.getByRole('dialog');await expect(dialog.locator('img')).toBeVisible();await expect(dialog.locator('a,iframe')).toHaveCount(0)
+ await page.keyboard.press('Escape');expect(page.context().pages()).toHaveLength(1)
+ await coupons.getByRole('button',{name:'全部',exact:true}).click()
+ const donki=coupons.getByRole('link',{name:'唐吉訶德 DON DON DONKI 開啟官方免稅優惠券',exact:true})
+ await expect(donki).toHaveAttribute('href','https://japanportal.donki-global.com/coupon/cp001_zhtw.html')
+ await expect(donki).toHaveAttribute('target','_blank');await expect(donki).toHaveAttribute('rel','noopener noreferrer')
 })
 
 test('退稅章節導航、機場比較與商家搜尋保留未確認資訊', async ({ page }) => {
@@ -76,8 +70,8 @@ test('退稅章節導航、機場比較與商家搜尋保留未確認資訊', as
   await expect(tax.locator('.merchant-row')).toContainText('提領費另按未稅價收 0.28%～0.32%。')
   await tax.getByRole('searchbox').fill('沒有這間商店')
   await expect(tax.getByText('沒有符合的商家或平台。')).toBeVisible()
-  await page.getByRole('navigation', { name: '旅行指南章節' }).getByRole('button', { name: '行李與購物', exact: true }).click()
-  await expect(page.getByRole('heading', { name: '行李與購物清單' })).toBeInViewport()
+  await page.getByRole('navigation', { name: '旅行指南章節' }).getByRole('button', { name: '行李打包清單', exact: true }).click()
+  await expect(page.getByRole('heading', { name: '行李打包清單' })).toBeInViewport()
   await expect(page).toHaveURL(/#guide$/)
 })
 
@@ -97,8 +91,11 @@ test('券圖與教學圖可在 App 內放大、還原及關閉，已過期券有
   await expect(dialog.locator('output')).toHaveText('150%')
   await dialog.getByRole('button', { name: '原尺寸', exact: true }).click()
   await expect(dialog.locator('output')).toHaveText('100%')
+  await dialog.getByRole('button',{name:'下一張優惠券圖片',exact:true}).click()
+  await expect(dialog.locator('.media-scroll img')).toHaveAttribute('src',/ui-test-2.png$/)
   await dialog.getByRole('button', { name: '關閉', exact: true }).click()
   const tax = taxSection(page)
+  await tax.locator('#tax-platforms').evaluate((el:HTMLDetailsElement)=>{el.open=true})
   await tax.getByRole('button', { name: /點擊放大原圖/ }).click()
   await expect(dialog.getByRole('img', { name: /使用者提供的日本退稅平台 APP/ })).toBeVisible()
   await dialog.getByRole('button', { name: '放大圖片', exact: true }).click()
@@ -170,11 +167,9 @@ test('指南所有章節與縮放對話框在窄手機不溢出，底部導覽�
   const scroll = dialog.getByRole('region', { name: '可捲動圖片' })
   expect(await scroll.evaluate(el => el.scrollWidth)).toBeGreaterThan(await scroll.evaluate(el => el.clientWidth))
   await page.keyboard.press('Escape')
-  const notes = page.getByRole('textbox', { name: '我的實用資訊補充（可編輯）' })
-  await notes.scrollIntoViewIfNeeded()
-  await expect(notes).toBeInViewport()
-  await notes.fill('階段 2 後的個人筆記仍會保存')
+  await expect(page.getByRole('heading',{name:'仙台實用資訊',exact:true})).toHaveCount(0)
+  await page.getByLabel('住宿名稱',{exact:true}).fill('個人飯店資料仍會保存')
   await page.reload()
-  await expect(notes).toHaveValue('階段 2 後的個人筆記仍會保存')
-  await page.screenshot({ path: '/tmp/sendai-phase2-guide-mobile.png', fullPage: true, animations: 'disabled' })
+  await expect(page.getByLabel('住宿名稱',{exact:true})).toHaveValue('個人飯店資料仍會保存')
+  await page.screenshot({ path: '/tmp/sendai-nov10-guide-mobile.png', fullPage: true, animations: 'disabled' })
 })

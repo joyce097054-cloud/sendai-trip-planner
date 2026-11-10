@@ -84,3 +84,14 @@
 .day-tabs { position: sticky; top: calc(var(--header-height) + env(safe-area-inset-top, 0px)); z-index: 20; background: var(--paper); }
 .day-summary { scroll-margin-top: calc(var(--header-height) + 120px + env(safe-area-inset-top, 0px)); }
 .stop-photo-cover { aspect-ratio: 3/2; }
+.day-intensity { color:var(--muted);font-size:13px;display:block;margin-top:8px; }
+.day-plan-picker { border-block:1px solid var(--line);padding:20px 0;margin-bottom:28px; }
+.day-plan-picker h3 { font-size:18px;margin-bottom:12px; }
+.day-plan-picker [aria-pressed=true] { border-color:var(--action);color:var(--action); }
+.day-plan-picker p { margin-top:12px; }
+.daily-tips { list-style:disc;padding-left:20px;font-size:14px; }
+.daily-tips li { margin:10px 0; }
+.archived-stops { margin-top:36px;padding-top:20px;border-top:1px solid var(--line); }
+.archived-stops > summary { min-height:44px;cursor:pointer;font-weight:600; }
+.plan-update { margin-block:20px; }
+.plan-update .button-row { margin-top:12px; }

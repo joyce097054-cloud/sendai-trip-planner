@@ -1,14 +1,20 @@
-import type { AppData, Photo } from '../types'
+import type { AppData, Photo, ShoppingItem } from '../types'
 export const STORAGE_KEY = 'sendai-journal-v1'
 const categories = ['美食', '活動', '購物', '景點', '住宿', '交通']
 function object(v: unknown): v is Record<string, unknown> { return !!v && typeof v === 'object' && !Array.isArray(v) }
-function string(v: unknown) { return typeof v === 'string' && v.length <= 20000 }
+function string(v: unknown): v is string { return typeof v === 'string' && v.length <= 20000 }
 function unique(items: { id: string }[]) { return new Set(items.map(i => i.id)).size === items.length }
+export function isShoppingItem(v: unknown): v is ShoppingItem {
+  return object(v) && string(v.id) && !!v.id && string(v.name) && !!v.name.trim() && (v.quantity === null || Number.isInteger(v.quantity) && Number(v.quantity) >= 1 && Number(v.quantity) <= 999) && string(v.shop) && string(v.notes) && typeof v.done === 'boolean'
+}
 export function isAppData(value: unknown): value is AppData {
   if (!object(value) || value.version !== 1 || !Array.isArray(value.stops) || !Array.isArray(value.packing) || !object(value.details)) return false
   if (value.stops.length > 1000 || value.packing.length > 2000) return false
+  if (value.listsRevision === 2 && value.shopping === undefined) return false
+  if (value.planRevision !== undefined && !string(value.planRevision) || value.planUpdateDismissed !== undefined && typeof value.planUpdateDismissed !== 'boolean' || value.day4Plan !== undefined && !['A','B'].includes(String(value.day4Plan)) || value.listsRevision !== undefined && value.listsRevision !== 2 || value.shoppingCloudTrip !== undefined && (typeof value.shoppingCloudTrip !== 'string' || !/^[0-9a-f-]{36}$/i.test(value.shoppingCloudTrip))) return false
+  if (value.shopping !== undefined && (!object(value.shopping) || !['lan','treaty'].every(k => { const list = (value.shopping as Record<string,unknown>)[k]; return Array.isArray(list) && list.length <= 2000 && list.every(isShoppingItem) && unique(list) }))) return false
   const time = (v: unknown) => v === '' || typeof v === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(v)
-  return value.stops.every(s => object(s) && string(s.id) && !!s.id && Number.isInteger(s.day) && Number(s.day) >= 1 && Number(s.day) <= 5 && time(s.start) && time(s.end) && categories.includes(String(s.category)) && typeof s.done === 'boolean' && ['name','japanese','description','duration','transport','photoTip','notes','mapQuery'].every(k => string(s[k])) && !!s.name && Array.isArray(s.tags) && s.tags.length <= 20 && s.tags.every(string))
+  return value.stops.every(s => object(s) && string(s.id) && !!s.id && Number.isInteger(s.day) && Number(s.day) >= 1 && Number(s.day) <= 5 && time(s.start) && time(s.end) && categories.includes(String(s.category)) && typeof s.done === 'boolean' && (s.variant === undefined || ['A','B'].includes(String(s.variant))) && (s.archived === undefined || typeof s.archived === 'boolean') && ['name','japanese','description','duration','transport','photoTip','notes','mapQuery'].every(k => string(s[k])) && !!s.name && Array.isArray(s.tags) && s.tags.length <= 20 && s.tags.every(string))
     && value.packing.every(p => object(p) && string(p.id) && !!p.id && string(p.group) && string(p.name) && !!p.name && Number.isInteger(p.quantity) && Number(p.quantity) >= 1 && Number(p.quantity) <= 999 && typeof p.done === 'boolean')
     && ['outbound','inbound','hotel','orderLink','notes'].every(k => string((value.details as Record<string, unknown>)[k]))
     && ['practicalNotes','hotelAddress','hotelPhone'].every(k => value.details && ((value.details as Record<string, unknown>)[k] === undefined || string((value.details as Record<string, unknown>)[k])))

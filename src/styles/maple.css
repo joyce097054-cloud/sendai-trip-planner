@@ -1,0 +1,16 @@
+.maple-toggle { display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;flex-basis:100%;cursor:pointer;font-size:12px; }
+.maple-toggle input { width:18px;height:18px;accent-color:var(--action); }
+.maple-toggle small { color:var(--muted); }
+.maple-layer { position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;contain:strict; }
+.app-shell { position:relative;z-index:1; }
+.maple-fall { position:absolute;top:-50px;left:12%;width:22px;color:#C97645;animation:maple-fall 24s linear infinite;animation-delay:-4s; }
+.maple-leaf { display:block;width:100%;height:auto;animation:maple-sway 7s ease-in-out infinite alternate; }
+.maple-1 { left:39%;width:17px;color:#966744;animation-duration:29s;animation-delay:-16s; }
+.maple-2 { left:71%;width:26px;color:#B89A61;animation-duration:33s;animation-delay:-23s; }
+.maple-3 { left:91%;width:19px;color:#C97645;animation-duration:27s;animation-delay:-11s; }
+@keyframes maple-fall { 0%{transform:translate3d(0,-40px,0);opacity:0}10%{opacity:.15}85%{opacity:.15}100%{transform:translate3d(36px,calc(100dvh + 90px),0);opacity:0} }
+@keyframes maple-sway { from{transform:translateX(-18px) rotate(-20deg)}to{transform:translateX(18px) rotate(55deg)} }
+.maple-layer[data-paused=true] *,.maple-layer[data-paused=true] { animation-play-state:paused; }
+body:has(dialog[open]) .maple-layer { visibility:hidden; }
+body:has(dialog[open]) .maple-layer * { animation-play-state:paused; }
+@media(prefers-reduced-motion:reduce){.maple-layer{display:none}}

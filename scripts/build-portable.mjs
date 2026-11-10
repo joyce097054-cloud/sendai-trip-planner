@@ -18,7 +18,7 @@ if (!javascript.includes(hero)) throw new Error('Hero asset was not found; porta
 const coupons = JSON.parse(await readFile(resolve(root, 'src/data/coupons.json'), 'utf8'))
 const tax = JSON.parse(await readFile(resolve(root, 'src/data/tax-refund.json'), 'utf8'))
 const guidePaths = new Set([
-  ...coupons.items.map(c => c.imagePath).filter(Boolean),
+  ...coupons.items.flatMap(c => [c.imagePath, ...(c.images ?? [])]).filter(Boolean),
   ...tax.sections.filter(s => s.image.available).map(s => s.image.path),
 ])
 const guideImages = {}

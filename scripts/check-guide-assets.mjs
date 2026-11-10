@@ -1,5 +1,6 @@
 import { readFile, realpath, stat } from 'node:fs/promises'
 import { resolve, sep } from 'node:path'
+import { createHash } from 'node:crypto'
 const root=resolve(import.meta.dirname,'..'),publicRoot=await realpath(resolve(root,'public'))
 const coupons=JSON.parse(await readFile(resolve(root,'src/data/coupons.json'),'utf8'))
 const tax=JSON.parse(await readFile(resolve(root,'src/data/tax-refund.json'),'utf8'))
@@ -9,6 +10,8 @@ async function verify(path){
  const target=await realpath(resolve(publicRoot,'.'+path)).catch(()=>{throw new Error(`圖片不存在：public${path}。請先放入檔案，再標示可用。`)})
  if(!target.startsWith(publicRoot+sep)||!(await stat(target)).isFile())throw new Error('指南圖片必須是 public 內的檔案。')
 }
-for(const c of coupons.items)if(c.imagePath!==null)await verify(c.imagePath)
+for(const c of coupons.items)for(const path of new Set([c.imagePath,...(c.images??[])].filter(Boolean)))await verify(path)
 for(const s of tax.sections)if(s.image.available)await verify(s.image.path)
 console.log(`Guide assets checked: ${coupons.items.filter(c=>c.imagePath).length} coupon images; ${tax.sections.filter(s=>s.image.available).length} teaching images ready; ${tax.sections.filter(s=>!s.image.available).length} original images pending.`)
+
+for(const source of coupons.sources??[]){await verify(source.path);if(!/^[a-f0-9]{64}$/.test(source.sha256))throw new Error('優惠券 SHA-256 格式不正確');const bytes=await readFile(resolve(publicRoot,'.'+source.path));if(createHash('sha256').update(bytes).digest('hex')!==source.sha256)throw new Error(`優惠券原圖校驗失敗：${source.path}`)}
