@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <title>仙台手帳</title>
-  <rect width="512" height="512" fill="#FAF8F4"/>
-  <path d="M160 350C120 282 151 207 236 190C292 179 331 149 357 111C380 208 382 285 335 337C290 390 205 396 160 350Z" fill="#F6EDE5" stroke="#9C512B" stroke-width="18" stroke-linejoin="round"/>
-  <path d="M149 388C198 304 253 236 328 182M207 306L201 250M245 263L299 268" fill="none" stroke="#9C512B" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FFFCF6"/><g stroke="#3E3A39" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"><rect x="69" y="65" width="374" height="382" rx="75" fill="#F6D27A"/><path d="M117 65v382" fill="none"/><path d="m194 223-6-86 70 48q29-9 58 0l70-48-6 86q-7 102-94 123-83-21-92-123Z" fill="#F2A497"/><path d="M195 229q53-2 91 63 43-66 93-63-16 97-93 117-75-20-91-117Z" fill="#FFFCF6"/><path d="m229 231 14 8m87-8-14 8m-37 36 7 8 8-8" fill="none"/><path d="m224 188 1 16 13-4m113-12-1 16-13-4" fill="#3E3A39"/></g></svg>

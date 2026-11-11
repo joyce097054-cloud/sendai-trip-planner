@@ -1,9 +1,9 @@
 {
   "app": "sendai-trip-planner",
-  "version": "15213b8deb00e96a",
+  "version": "be2c8d91aec18588",
   "assets": [
-    "assets/index-DcVnKv-C.css",
-    "assets/index-zUNCLVWE.js",
+    "assets/index-BRXVfdd7.css",
+    "assets/index-DU7fKPbu.js",
     "coupons/bic-camera.png",
     "coupons/donki-logo.jpg",
     "coupons/jins.jpg",
@@ -11,6 +11,7 @@
     "coupons/lotte-ginza.jpg",
     "coupons/sundrug.png",
     "coupons/tsuruha.png",
+    "fonts/Huninn-Regular.ttf",
     "icons/apple-touch-icon.png",
     "icons/icon-192.png",
     "icons/icon-512.png",
