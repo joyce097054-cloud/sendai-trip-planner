@@ -1,6 +1,6 @@
 /* Generated into dist/sw.js. Only the explicit project asset list is cached. */
-const VERSION = '86d6c806b7f1b278'
-const ASSETS = ["assets/index-C-ejL4Up.js","assets/index-Cr4qb4ep.css","icons/apple-touch-icon.png","icons/icon-192.png","icons/icon-512.png","icons/icon-maskable-512.png","icons/journal.svg","index.html","manifest.webmanifest","sendai-autumn.svg","tax-refund/01-platforms.jpg","tax-refund/02-prepare-home-screen.jpg","tax-refund/03-vjw-kiosk.jpg","tax-refund/04-cash-refund.jpg"]
+const VERSION = '15213b8deb00e96a'
+const ASSETS = ["assets/index-DcVnKv-C.css","assets/index-zUNCLVWE.js","coupons/bic-camera.png","coupons/donki-logo.jpg","coupons/jins.jpg","coupons/kokumin.jpg","coupons/lotte-ginza.jpg","coupons/sundrug.png","coupons/tsuruha.png","icons/apple-touch-icon.png","icons/icon-192.png","icons/icon-512.png","icons/icon-maskable-512.png","icons/journal.svg","index.html","manifest.webmanifest","sendai-autumn.svg","tax-refund/01-platforms.jpg","tax-refund/02-prepare-home-screen.jpg","tax-refund/03-vjw-kiosk.jpg","tax-refund/04-cash-refund.jpg"]
 const SCOPE = self.registration.scope
 const PREFIX = `sendai-shell-${encodeURIComponent(new URL(SCOPE).pathname)}-`
 const CACHE = PREFIX + VERSION
