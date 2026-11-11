@@ -46,4 +46,47 @@ describe('11/10 正式行程與無損遷移',()=>{
    expect(isAppData({...data,shopping:{...data.shopping,lan:[{...data.shopping!.lan[0],quantity:1.5}]}})).toBe(false)
    expect(isAppData({...data,shopping:{lan:[data.shopping!.lan[0],data.shopping!.lan[0]],treaty:[]}})).toBe(false)
  })
+ it('打包接近或已達容量時只補可容納的預設，所有原物品都保留',()=>{
+   for (const count of [1999,2000]) {
+     const packing=Array.from({length:count},(_,i)=>({id:`custom-pack-${i}`,group:'衣物類',name:`自訂物品 ${i}`,quantity:2,done:i%2===0}))
+     const old:AppData={version:1,stops:[],packing,details:defaultDetails}
+     const before=JSON.stringify(old)
+     expect(isAppData(old)).toBe(true)
+     const upgraded=upgradeLists(old)
+     expect(upgraded.packing).toHaveLength(2000)
+     expect(upgraded.packing.slice(0,count)).toEqual(packing)
+     expect(isAppData(upgraded)).toBe(true)
+     expect(JSON.stringify(old)).toBe(before)
+   }
+ })
+ it('正式行程更新超過容量時明確拒絕，原始有效資料不變',()=>{
+   const old=freshData(defaultDetails);delete old.planRevision
+   old.stops=Array.from({length:1001-defaultStops.length},(_,i)=>({...defaultStops[0],id:`old-stop-${i}`,notes:'我的原筆記',done:true}))
+   const before=JSON.stringify(old)
+   expect(isAppData(old)).toBe(true)
+   expect(()=>adoptFormalPlan(old)).toThrow(/1000 筆儲存上限/)
+   expect(JSON.stringify(old)).toBe(before)
+   expect(isAppData(old)).toBe(true)
+ })
+ it('正式行程更新剛好達容量仍可保存、備份驗證及讀回',async()=>{
+   const old=freshData(defaultDetails);delete old.planRevision
+   old.stops=Array.from({length:1000-defaultStops.length},(_,i)=>({...defaultStops[0],id:`boundary-stop-${i}`}))
+   const adopted=adoptFormalPlan(old)
+   expect(adopted.stops).toHaveLength(1000)
+   expect(isAppData(adopted)).toBe(true)
+   expect((await parseBackup(JSON.stringify(await makeBackup(adopted,[])))).data).toEqual(adopted)
+ })
+ it('預設ID碰撞時原站ID與照片關聯不變，正式58筆仍完整且新ID確定',()=>{
+   const old=freshData(defaultDetails);delete old.planRevision
+   const id=defaultStops[0].id
+   old.stops=[id,`${id}-formal-1`,`${id}-formal-2`].map(id=>({...defaultStops[0],id,name:'原有修改',notes:'原筆記',done:true}))
+   const adopted=adoptFormalPlan(old),added=adopted.stops.filter(s=>!s.archived)
+   expect(adopted.stops.slice(0,3)).toEqual(old.stops.map(s=>({...s,archived:true})))
+   expect(added).toHaveLength(defaultStops.length)
+   expect(added[0].id).toBe(`${id}-formal-3`)
+   expect(added.map(({id:_,...s})=>s)).toEqual(defaultStops.map(({id:_,...s})=>s))
+   expect(new Set(adopted.stops.map(s=>s.id)).size).toBe(adopted.stops.length)
+   expect(adoptFormalPlan(old).stops.map(s=>s.id)).toEqual(adopted.stops.map(s=>s.id))
+   expect(isAppData(adopted)).toBe(true)
+ })
 })

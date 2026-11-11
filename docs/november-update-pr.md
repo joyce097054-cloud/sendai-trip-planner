@@ -6,6 +6,8 @@
 
 使用者 ZIP 的 6 張券與 DONKI 品牌圖均保留原檔、比例與條碼，附 SHA-256。一般券支援全螢幕縮放、多圖切換及離線；唐吉訶德另開指定官方原網址，離線禁止啟用。附有可關閉、尊重減少動態且不遮對話框的四片 CSS 楓葉。
 
-驗證：TypeScript／建置、48 項單元、69 項 Chromium 瀏覽器檢查、13 項內嵌 PostgreSQL 權限／衝突檢查通過。瀏覽器 API／WebSocket 是明確合約替身，內嵌 PostgreSQL 是單連線；不當作正式 Supabase／兩支 iPhone Safari 或主畫面實測。
+驗證：TypeScript／建置、52 項單元、80 項 Chromium 瀏覽器檢查、14 項內嵌 PostgreSQL 權限／衝突檢查通過。瀏覽器 API／WebSocket 是明確合約替身，內嵌 PostgreSQL 是單連線；不當作正式 Supabase／兩支 iPhone Safari 或主畫面實測。
 
 未部署、不合併 main。需管理者套用新增 003 後，再驗收真實兩裝置同步與 RLS。優惠券的新制受理方式及樂天銀座／羽田成田限制待店家確認。操作與資料位置見 docs/november-update.md；內容管理見 docs/guide-content.md。
+
+補修包含備份／照片互斥與跨分頁變更拒絕、遷移容量與 ID 碰撞保護，以及帳本切換後的晚到回應隔離。同排序位置的上移／下移以版本保護逐筆重排，衝突即停止並提示；003 SQL 未修改。

@@ -4,6 +4,7 @@ import type { Stop, Photo, Category } from '../types'
 import { days, visibleStops } from '../data/itinerary'
 import { mapUrl } from '../lib/maps'
 import { compressPhoto, changePhotos } from '../lib/photos'
+import { beginLocalPhotoTask } from '../lib/local-task'
 import Modal from './Modal'
 import ItineraryStop from './ItineraryStop'
 
@@ -25,7 +26,7 @@ function StopForm({ stop, onSave, onClose }: { stop: Stop; onSave: (s: Stop) => 
     <p className="muted small">順序依手動排列保留，修改時間後可使用「依時間排序」。</p><button className="button primary" type="submit">儲存行程</button>
   </form></Modal>
 }
-export default function Itinerary({ stops, setStops, photos, reloadPhotos, activeDay, setActiveDay, day4Plan, setDay4Plan, formal, report }: { stops: Stop[]; setStops: (s: Stop[]) => void; photos: Photo[]; reloadPhotos: () => Promise<void>; activeDay: number; setActiveDay: (day: number) => void; day4Plan: 'A' | 'B'; setDay4Plan: (plan: 'A' | 'B') => void; formal: boolean; report: (message: string) => void }) {
+export default function Itinerary({ stops, setStops, photos, reloadPhotos, activeDay, setActiveDay, day4Plan, setDay4Plan, formal, report }: { stops: Stop[]; setStops: (s: Stop[] | ((current: Stop[]) => Stop[])) => void; photos: Photo[]; reloadPhotos: () => Promise<void>; activeDay: number; setActiveDay: (day: number) => void; day4Plan: 'A' | 'B'; setDay4Plan: (plan: 'A' | 'B') => void; formal: boolean; report: (message: string) => void }) {
   const [editing, setEditing] = useState<Stop | null>(null)
   const [routeOpen, setRouteOpen] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -39,14 +40,26 @@ export default function Itinerary({ stops, setStops, photos, reloadPhotos, activ
     const next = [...stops], a = next.indexOf(stop), b = next.indexOf(target)
     ;[next[a], next[b]] = [next[b], next[a]]; setStops(next)
   }
+  async function photoTask(work: () => Promise<void>) {
+    let release: (() => void) | undefined
+    try { release = beginLocalPhotoTask(); await work() }
+    catch (e) { report((e as Error).message) }
+    finally { release?.() }
+  }
   async function remove(stop: Stop) {
     if (!confirm(`刪除「${stop.name}」及其照片？此操作無法復原。`)) return
-    try { await changePhotos([], photos.filter(p => p.stopId === stop.id).map(p => p.id)); setStops(stops.filter(s => s.id !== stop.id)); await reloadPhotos() } catch (e) { report((e as Error).message) }
+    await photoTask(async () => { await changePhotos([], photos.filter(p => p.stopId === stop.id).map(p => p.id)); setStops(current => current.filter(s => s.id !== stop.id)); await reloadPhotos() })
+  }
+  async function deletePhoto(photo: Photo) {
+    if (confirm('刪除此照片？')) await photoTask(async () => { await changePhotos([], [photo.id]); await reloadPhotos() })
   }
   async function upload(stop: Stop, files: FileList | null) {
     if (!files?.length) return
-    setUploading(true)
-    try { const entries = await Promise.all(Array.from(files).map(async file => ({ id: crypto.randomUUID(), stopId: stop.id, caption: file.name, blob: await compressPhoto(file) }))); await changePhotos(entries); await reloadPhotos(); report('照片已儲存在此裝置，記得定期匯出備份。') } catch (e) { report((e as Error).message) } finally { setUploading(false) }
+    await photoTask(async () => {
+      setUploading(true)
+      try { const entries = await Promise.all(Array.from(files).map(async file => ({ id: crypto.randomUUID(), stopId: stop.id, caption: file.name, blob: await compressPhoto(file) }))); await changePhotos(entries); await reloadPhotos(); report('照片已儲存在此裝置，記得定期匯出備份。') }
+      finally { setUploading(false) }
+    })
   }
   return <div className="page-content">
     <div className="itinerary-index"><h2>五日行程</h2><span className="muted small">按日期翻閱旅程</span></div>
@@ -55,10 +68,10 @@ export default function Itinerary({ stops, setStops, photos, reloadPhotos, activ
     {formal && activeDay===4 && <section className="day-plan-picker" aria-label="第四天方案"><h3>狐狸村必去，下午留點彈性</h3><div className="button-row" role="group" aria-label="切換第四天方案">{(['A','B'] as const).map(p=><button key={p} className="button" aria-pressed={day4Plan===p} onClick={()=>setDay4Plan(p)}>方案 {p}｜{p==='A'?'狐狸村＋金蛇水神社':'狐狸村＋仙台自由活動'}</button>)}</div><p className="muted small">狐狸村停留較久時，優先建議方案 B。切換保留兩邊修改、筆記與勾選；金蛇水神社為彈性／可取消。</p></section>}
     <div className="itinerary-layout"><div><div className="section-heading timeline-heading"><h3><Route size={18}/> 今日散策路線 <span className="muted small">{list.length} 個安排</span></h3><button className="text-button" onClick={() => setRouteOpen(!routeOpen)} aria-expanded={routeOpen}>路線總覽 <ChevronDown size={14}/></button></div>
     {routeOpen && <section className="panel route-panel"><h3>依行程順序出發</h3><p className="muted small">Google Maps 大眾運輸不支援多站路線，請逐段開啟；實際班次與地點請出發前確認。</p><ol>{list.map((s, i) => <li key={s.id}><a href={mapUrl(s.mapQuery || s.name)} target="_blank" rel="noreferrer">{s.name} <ArrowUpRight size={13}/></a>{i > 0 && <a className="small" href={`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(list[i-1].mapQuery || list[i-1].name)}&destination=${encodeURIComponent(s.mapQuery || s.name)}&travelmode=transit`} target="_blank" rel="noreferrer">上一站 → 此站</a>}</li>)}</ol></section>}
-    <div className="timeline">{list.map((stop, index) => <ItineraryStop key={stop.id} stop={stop} index={index} total={list.length} photos={photos.filter(p => p.stopId === stop.id)} uploading={uploading} onMove={offset => move(stop, offset)} onEdit={() => setEditing(stop)} onToggle={() => update({ ...stop, done: !stop.done })} onNotes={notes => update({ ...stop, notes })} onRemove={() => void remove(stop)} onUpload={files => void upload(stop, files)} onDeletePhoto={async photo => { if (confirm('刪除此照片？')) { try { await changePhotos([], [photo.id]); await reloadPhotos() } catch (e) { report((e as Error).message) } } }}/>)}</div>
+    <div className="timeline">{list.map((stop, index) => <ItineraryStop key={stop.id} stop={stop} index={index} total={list.length} photos={photos.filter(p => p.stopId === stop.id)} uploading={uploading} onMove={offset => move(stop, offset)} onEdit={() => setEditing(stop)} onToggle={() => update({ ...stop, done: !stop.done })} onNotes={notes => update({ ...stop, notes })} onRemove={() => void remove(stop)} onUpload={files => void upload(stop, files)} onDeletePhoto={photo => void deletePhoto(photo)}/>)}</div>
     {!list.length && <div className="panel empty"><MapPin/><h3>把這一天留給驚喜</h3><p>新增第一個想去的地方，開始安排旅程。</p></div>}
     <div className="timeline-controls"><button className="add-stop" onClick={() => setEditing({ id: crypto.randomUUID(), day: activeDay, start: '', end: '', name: '', japanese: '', category: '景點', description: '', duration: '', transport: '', tags: [], photoTip: '', notes: '', done: false, mapQuery: '', variant: activeDay===4?day4Plan:undefined })}><Plus size={17}/> 新增一段旅程</button>{list.length > 1 && <button className="text-button small" onClick={() => { const sorted = [...list].sort((a,b) => (a.start || '99:99').localeCompare(b.start || '99:99')); let i = 0; setStops(stops.map(s => list.some(v=>v.id===s.id) ? sorted[i++] : s)) }}>依時間排序</button>}</div>
     </div><aside className="day-aside"><section className="panel daily-reminder"><span className="eyebrow">A LITTLE NOTE</span><h3>當日旅遊小提醒</h3><div className="reminder-item"><span>01 / 穿著提案</span><p>{day.clothing}</p></div><div className="reminder-item"><span>02 / 賞楓筆記</span><p>{formal?day.foliage:'楓況受當年天氣影響，請依原有安排查核最新資訊。'}</p></div><div className="reminder-item"><span>03 / 出發前留意</span><p>{formal?day.reminder:'目前顯示保留的個人行程，正式行程更新可由資料備份工具開啟。'}</p>{formal && <ul className="daily-tips">{day.tips?.map(t=><li key={t}>{t}</li>)}</ul>}</div><div className="souvenir"><span>帶一點仙台回家</span><p>{day.souvenir}</p></div></section></aside></div>
-    {!!archived.length && <details className="archived-stops"><summary>舊行程存檔 · {archived.length} 筆（含原筆記與照片）</summary><p className="muted small">更新前的原資料保留在這裡。可查看、編輯或放回目前行程；不會自動重新排入正式路線。</p>{archived.map((stop,index)=><div key={stop.id}><ItineraryStop stop={stop} index={index} total={archived.length} photos={photos.filter(p=>p.stopId===stop.id)} uploading={uploading} onMove={offset=>move(stop,offset,archived)} onEdit={()=>setEditing(stop)} onToggle={()=>update({...stop,done:!stop.done})} onNotes={notes=>update({...stop,notes})} onRemove={()=>void remove(stop)} onUpload={files=>void upload(stop,files)} onDeletePhoto={async photo=>{if(confirm('刪除此照片？')){try { await changePhotos([],[photo.id]);await reloadPhotos() } catch (e) { report((e as Error).message) }}}}/><button className="text-button" onClick={()=>update({...stop,archived:false})}>將「{stop.name}」放回目前行程</button></div>)}</details>}
+    {!!archived.length && <details className="archived-stops"><summary>舊行程存檔 · {archived.length} 筆（含原筆記與照片）</summary><p className="muted small">更新前的原資料保留在這裡。可查看、編輯或放回目前行程；不會自動重新排入正式路線。</p>{archived.map((stop,index)=><div key={stop.id}><ItineraryStop stop={stop} index={index} total={archived.length} photos={photos.filter(p=>p.stopId===stop.id)} uploading={uploading} onMove={offset=>move(stop,offset,archived)} onEdit={()=>setEditing(stop)} onToggle={()=>update({...stop,done:!stop.done})} onNotes={notes=>update({...stop,notes})} onRemove={()=>void remove(stop)} onUpload={files=>void upload(stop,files)} onDeletePhoto={photo => void deletePhoto(photo)}/><button className="text-button" onClick={()=>update({...stop,archived:false})}>將「{stop.name}」放回目前行程</button></div>)}</details>}
     {editing && <StopForm stop={editing} onClose={() => setEditing(null)} onSave={s => { setStops(stops.some(x => x.id === s.id) ? stops.map(x => x.id === s.id ? s : x) : [...stops, s]); setActiveDay(s.day); setEditing(null); report('行程已更新') }}/>}</div>
 }

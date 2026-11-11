@@ -47,3 +47,4 @@
 .pwa-help h3 { font-size: 18px; }
 .pwa-help ol { list-style: decimal; padding-left: 24px; }
 .pwa-help li { padding-block: 6px; }
+.local-task-status { position:fixed;z-index:100;inset:50% 24px auto;margin:auto;max-width:480px;padding:20px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);color:var(--ink);text-align:center;box-shadow:0 4px 18px #493b3212; }
