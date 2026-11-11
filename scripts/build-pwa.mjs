@@ -8,7 +8,7 @@ async function walk(folder, prefix = '') {
   for (const entry of await readdir(folder, { withFileTypes: true })) {
     const name = prefix + entry.name
     if (entry.isDirectory()) result.push(...await walk(resolve(folder, entry.name), `${name}/`))
-    else if (/\.(?:html|js|css|svg|png|jpe?g|webp|webmanifest)$/.test(name) && name !== 'sw.js') result.push(name)
+    else if (/\.(?:html|js|css|svg|png|jpe?g|webp|webmanifest|ttf|woff2)$/.test(name) && name !== 'sw.js') result.push(name)
   }
   return result
 }

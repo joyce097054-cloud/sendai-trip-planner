@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUp, ArrowUpRight, Camera, Check, ChevronDown, Clock3, Edit3, Footprints, MapPin, Trash2 } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpRight, Bus, Car, Plane, Route, Ship, TrainFront, Camera, Check, ChevronDown, Clock3, Edit3, Footprints, MapPin, Trash2 } from 'lucide-react'
 import type { Photo, Stop } from '../types'
 import { directionUrl } from '../lib/maps'
 
@@ -23,16 +23,19 @@ interface Props {
   onUpload: (files: FileList | null) => void; onDeletePhoto: (photo: Photo) => void;
 }
 export default function ItineraryStop({ stop, index, total, photos, uploading, onMove, onEdit, onToggle, onNotes, onRemove, onUpload, onDeletePhoto }: Props) {
+  const mode = /飛機|搭機|航班|航空/.test(stop.transport) ? 'air' : /遊船|觀光船|渡輪/.test(stop.transport) ? 'ship' : /計程車|包車/.test(stop.transport) ? 'taxi' : /JR|新幹線|電車|地鐵|機場線/.test(stop.transport) ? 'rail' : /巴士|公車|接駁/.test(stop.transport) ? 'bus' : /步行|走路|散步/.test(stop.transport) ? 'walk' : 'other'
+  const TransportIcon = mode === 'air' ? Plane : mode === 'ship' ? Ship : mode === 'taxi' ? Car : mode === 'rail' ? TrainFront : mode === 'bus' ? Bus : mode === 'walk' ? Footprints : Route
   return <article className={`stop-row ${stop.done ? 'is-done' : ''}`}>
     <div className="time-rail"><strong>{stop.start || '彈性'}</strong><span>{stop.end}</span><i aria-hidden="true"/></div>
     <div className="stop-card">
-      <div className="stop-topline"><span className="category">{stop.category}</span><div className="stop-actions">
+      <div className="stop-topline"><span className="category" data-category={stop.category}>{stop.category}</span><div className="stop-actions">
         <button className="icon-button" title="上移行程" aria-label={`上移 ${stop.name}`} disabled={index === 0} onClick={() => onMove(-1)}><ArrowUp size={16} aria-hidden="true"/></button>
         <button className="icon-button" title="下移行程" aria-label={`下移 ${stop.name}`} disabled={index === total - 1} onClick={() => onMove(1)}><ArrowDown size={16} aria-hidden="true"/></button>
         <button className="icon-button" aria-label={`編輯 ${stop.name}`} onClick={onEdit}><Edit3 size={16} aria-hidden="true"/></button>
       </div></div>
       <div className="stop-title"><div><h3>{stop.name}</h3>{stop.japanese && <p className="japanese">{stop.japanese}</p>}</div><button className="complete-button" aria-label={`完成 ${stop.name}`} aria-pressed={stop.done} onClick={onToggle}><span>{stop.done && <Check size={17} aria-hidden="true"/>}</span></button></div>
       <div className="stop-meta"><span><Clock3 size={14} aria-hidden="true"/>{stop.duration || '停留時間自由安排'}</span>{stop.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}</div>
+      {stop.transport && <div className="transport-badge" data-mode={mode}><TransportIcon size={14} aria-hidden="true"/><span>{stop.transport}</span></div>}
       {photos[0] && ['景點', '活動'].includes(stop.category) && <PhotoCover photo={photos[0]} name={stop.name}/>}
       <details className="stop-information"><summary>交通與景點資訊<ChevronDown size={15} aria-hidden="true"/></summary><div>
         <p className="stop-description">{stop.description || '還沒有景點介紹，可從編輯加入。'}</p>

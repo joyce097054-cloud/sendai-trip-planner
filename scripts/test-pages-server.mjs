@@ -12,7 +12,7 @@ if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('Inv
 // controls are disabled for normal Pages tests and never enter the site build.
 const pwaTest = process.env.SENDAI_PWA_TEST === '1'
 let workerRevision = '', blockedAsset = ''
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg' }
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.ttf': 'font/ttf' }
 const server = createServer(async (request, response) => {
   let pathname, url
   try { url = new URL(request.url ?? '/', `http://127.0.0.1:${port}`); pathname = decodeURIComponent(url.pathname) } catch { response.writeHead(400).end(); return }

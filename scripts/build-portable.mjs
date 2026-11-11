@@ -8,11 +8,7 @@ const script = html.match(/<script[^>]*src="([^"]+)"[^>]*><\/script>/)
 const stylesheet = html.match(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"[^>]*>/)
 if (!script || !stylesheet) throw new Error('Cannot find the Vite entry assets; build the app first.')
 const asset = url => resolve(root, 'dist', url.replace(/^\//, ''))
-const svg = await readFile(resolve(root, 'public/sendai-autumn.svg'))
-const image = `data:image/svg+xml;base64,${svg.toString('base64')}`
 let javascript = await readFile(asset(script[1]), 'utf8')
-const hero = JSON.stringify('sendai-autumn.svg')
-if (!javascript.includes(hero)) throw new Error('Hero asset was not found; portable build needs updating.')
 // Keep user-supplied guide images inside the standalone artifact too. Missing
 // teaching originals stay marked unavailable in JSON and are never substituted.
 const coupons = JSON.parse(await readFile(resolve(root, 'src/data/coupons.json'), 'utf8'))
@@ -29,8 +25,9 @@ for (const path of guidePaths) {
   guideImages[path] = `data:${mime};base64,${bytes.toString('base64')}`
 }
 javascript = `globalThis.__SENDAI_PORTABLE__=true;globalThis.__SENDAI_GUIDE_IMAGES__=${JSON.stringify(guideImages)};\n${javascript}`
-javascript = javascript.replaceAll(hero, JSON.stringify(image)).replace(/<\/script/gi, '<\\/script')
-const css = (await readFile(asset(stylesheet[1]), 'utf8')).replace(/<\/style/gi, '<\\/style')
+javascript = javascript.replace(/<\/script/gi, '<\\/script')
+const font = await readFile(resolve(root, 'public/fonts/Huninn-Regular.ttf'))
+const css = (await readFile(asset(stylesheet[1]), 'utf8')).replaceAll('../fonts/Huninn-Regular.ttf', `data:font/ttf;base64,${font.toString('base64')}`).replace(/<\/style/gi, '<\\/style')
 html = html.replace(script[0], () => `<script type="module">${javascript}</script>`)
 html = html.replace(stylesheet[0], () => `<style>${css}</style>`)
 // A standalone desktop file must not register a worker or request a manifest.

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('四頁導覽固定貼齊底部，手機操作區與內容寬度正常', async ({ page }, testInfo) => {
+test('四頁導覽固定於頂端，手機操作區與內容寬度正常', async ({ page }, testInfo) => {
   await page.route('https://api.open-meteo.com/**', route => route.fulfill({ json: { daily: { time: [] } } }))
   await page.goto('/')
   const nav = page.getByRole('navigation', { name: '主導覽' })
@@ -12,8 +12,13 @@ test('四頁導覽固定貼齊底部，手機操作區與內容寬度正常', as
       await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('aria-current', 'page')
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
       const box = (await nav.boundingBox())!
-      expect(box.x).toBe(0); expect(box.width).toBe(width)
-      expect(Math.round(box.y + box.height)).toBe(844)
+      expect(box.x).toBeGreaterThanOrEqual(0)
+      expect(box.x + box.width).toBeLessThanOrEqual(width)
+      expect(box.y).toBeLessThan(125)
+      const header = (await page.locator('.site-header').boundingBox())!
+      expect(Math.round(header.y)).toBe(0)
+      await page.evaluate(() => window.scrollTo(0, 400))
+      expect(Math.round((await page.locator('.site-header').boundingBox())!.y)).toBe(0)
       if (name === '行程 Itinerary') {
         for (const button of await page.locator('.day-tabs button, .stop-actions .icon-button, .complete-button').all()) {
           const target = (await button.boundingBox())!
